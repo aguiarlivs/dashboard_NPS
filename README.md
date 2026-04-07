@@ -1,6 +1,6 @@
 # Dashboard NPS
 
-Dashboard estático de NPS gerado a partir de `dados7abr.csv`.
+Apresentação dos resultados do NPS em um dashboard estático gerado a partir de `dados7abr.csv`.
 
 ## Estrutura
 
