@@ -843,10 +843,20 @@ strong {
 
 .table-shell {
   overflow-x: auto;
+  overflow-y: hidden;
   border-radius: var(--radius-xl);
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.84);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.table-shell--limited {
+  max-height: 820px;
+}
+
+.table-shell--scrollable {
+  overflow-y: auto;
+  scrollbar-gutter: stable;
 }
 
 table {
@@ -1140,6 +1150,7 @@ tbody tr:hover {
   .table-shell {
     overflow: visible;
     box-shadow: none;
+    max-height: none !important;
   }
 
   table {

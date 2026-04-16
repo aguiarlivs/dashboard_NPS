@@ -8,6 +8,7 @@
   const payload = JSON.parse(dataElement.textContent || "{}");
   const sentRecords = Array.isArray(payload.sentRecords) ? payload.sentRecords : [];
   const responseRecords = Array.isArray(payload.responseRecords) ? payload.responseRecords : [];
+  const tableVisibleRows = 10;
 
   const zoneMetas = [
     { label: "Crítica", start: -100, end: 0, color: "#ef4444", badgeClass: "status-badge--critical", valueClass: "nps-value--critical" },
@@ -491,6 +492,10 @@
       `;
     }).join("");
 
+    const shouldLimitRows = ordered.length > tableVisibleRows;
+    const tableShellClass = shouldLimitRows ? "table-shell table-shell--limited" : "table-shell";
+    const tableShellAttrs = shouldLimitRows ? ` data-row-limit="${tableVisibleRows}"` : "";
+
     return `
       <section class="card card-wide card-table">
         <div class="card-head">
@@ -500,7 +505,7 @@
           </div>
           <p class="chart-caption">${rows.length} respostas registradas</p>
         </div>
-        <div class="table-shell">
+        <div class="${tableShellClass}"${tableShellAttrs}>
           <table>
             <caption class="sr-only">Tabela com todas as respostas de NPS</caption>
             <thead>
@@ -518,6 +523,38 @@
         </div>
       </section>
     `;
+  }
+
+  function applyTableScrollLimit() {
+    const tableShells = document.querySelectorAll(".table-shell--limited[data-row-limit]");
+
+    tableShells.forEach((shell) => {
+      shell.style.maxHeight = "";
+      shell.classList.remove("table-shell--scrollable");
+
+      const rowLimit = Number(shell.dataset.rowLimit);
+      if (!Number.isFinite(rowLimit) || rowLimit <= 0) {
+        return;
+      }
+
+      const head = shell.querySelector("thead");
+      const bodyRows = shell.querySelectorAll("tbody tr");
+      if (!head || bodyRows.length <= rowLimit) {
+        return;
+      }
+
+      let maxHeight = head.getBoundingClientRect().height;
+      for (let index = 0; index < rowLimit; index += 1) {
+        maxHeight += bodyRows[index].getBoundingClientRect().height;
+      }
+
+      const shellStyles = getComputedStyle(shell);
+      const borderTop = Number.parseFloat(shellStyles.borderTopWidth) || 0;
+      const borderBottom = Number.parseFloat(shellStyles.borderBottomWidth) || 0;
+
+      shell.style.maxHeight = `${Math.ceil(maxHeight + borderTop + borderBottom)}px`;
+      shell.classList.add("table-shell--scrollable");
+    });
   }
 
   function renderFilterSummary(state, filteredResponses, baseSent) {
@@ -576,6 +613,7 @@
     slots.distribution.innerHTML = renderDistributionCard(distribution, summary.total);
     slots.ranking.innerHTML = renderRankingCard(ranking, ignored);
     slots.table.innerHTML = renderTableCard(filteredResponses);
+    applyTableScrollLimit();
     renderFilterSummary(state, filteredResponses, baseSent);
   }
 
@@ -594,6 +632,11 @@
   controls.query?.addEventListener("input", render);
   controls.reset?.addEventListener("click", resetFilters);
   controls.print?.addEventListener("click", () => window.print());
+  window.addEventListener("resize", applyTableScrollLimit);
+
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(applyTableScrollLimit).catch(() => {});
+  }
 
   render();
 })();

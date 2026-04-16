@@ -1,13 +1,13 @@
 # Dashboard NPS
 
-Apresentação dos resultados do NPS em um dashboard estático gerado a partir de `dados7abr.csv`.
+Apresentação dos resultados do NPS em um dashboard estático gerado a partir de `dados16abr.csv`.
 
 ## Estrutura
 
 - `main.py`: gera o `index.html`
 - `styles.css`: estilos do dashboard
 - `dashboard.js`: filtros, atualização dinâmica e exportação/impressão
-- `dados7abr.csv`: base de dados
+- `dados16abr.csv`: base de dados
 - `index.html`: artefato gerado para apresentação
 
 ## Como atualizar o dashboard

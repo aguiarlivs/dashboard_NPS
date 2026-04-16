@@ -11,12 +11,13 @@ import pandas as pd
 
 
 BASE_DIR = Path(__file__).resolve().parent
-CSV_PATH = BASE_DIR / "dados7abr.csv"
+CSV_PATH = BASE_DIR / "dados16abr.csv"
 OUTPUT_PATH = BASE_DIR / "index.html"
 STYLESHEET_PATH = BASE_DIR / "styles.css"
 STYLESHEET_NAME = STYLESHEET_PATH.name
 SCRIPT_PATH = BASE_DIR / "dashboard.js"
 SCRIPT_NAME = SCRIPT_PATH.name
+TABLE_VISIBLE_ROWS = 10
 
 
 @dataclass(frozen=True)
@@ -600,6 +601,13 @@ def render_table_card(rows: list[dict[str, str]]) -> str:
             """
         )
 
+    table_shell_class = "table-shell table-shell--limited" if len(rows) > TABLE_VISIBLE_ROWS else "table-shell"
+    table_shell_limit_attr = (
+        f' data-row-limit="{TABLE_VISIBLE_ROWS}"'
+        if len(rows) > TABLE_VISIBLE_ROWS
+        else ""
+    )
+
     return f"""
     <section class="card card-wide card-table">
       <div class="card-head">
@@ -609,7 +617,7 @@ def render_table_card(rows: list[dict[str, str]]) -> str:
         </div>
         <p class="chart-caption">{len(rows)} respostas registradas</p>
       </div>
-      <div class="table-shell">
+      <div class="{table_shell_class}"{table_shell_limit_attr}>
         <table>
           <caption class="sr-only">Tabela com todas as respostas de NPS</caption>
           <thead>
