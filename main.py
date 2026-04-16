@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from html import escape
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 
@@ -18,6 +19,7 @@ STYLESHEET_NAME = STYLESHEET_PATH.name
 SCRIPT_PATH = BASE_DIR / "dashboard.js"
 SCRIPT_NAME = SCRIPT_PATH.name
 TABLE_VISIBLE_ROWS = 10
+DISPLAY_TIMEZONE = ZoneInfo("America/Sao_Paulo")
 
 
 @dataclass(frozen=True)
@@ -80,6 +82,25 @@ def format_number(value: float, decimals: int = 0) -> str:
 
 def format_percent(value: float, decimals: int = 1) -> str:
     return f"{format_number(value, decimals)}%"
+
+
+def format_response_datetime(value: object) -> str:
+    if pd.isna(value):
+        return "-"
+
+    if isinstance(value, pd.Timestamp):
+        timestamp = value
+    else:
+        parsed = pd.to_datetime(value, errors="coerce", utc=True)
+        if pd.isna(parsed):
+            return "-"
+        timestamp = parsed
+
+    if timestamp.tzinfo is None:
+        timestamp = timestamp.tz_localize("UTC")
+
+    localized = timestamp.tz_convert(DISPLAY_TIMEZONE)
+    return localized.strftime("%d/%m/%Y %H:%M")
 
 
 def pluralize_responses(total: int) -> str:
@@ -213,6 +234,7 @@ def prepare_table_rows(responses: pd.DataFrame) -> list[dict[str, str]]:
                 "cliente": normalize_text(row["cliente"], "Sem cliente"),
                 "nome_contato": normalize_text(row["nome_contato"], "Sem contato"),
                 "csm": normalize_csm(row["csm"]),
+                "data_resposta": format_response_datetime(row["data_resposta"]),
                 "nota_numerica": "-" if pd.isna(score) else str(int(round(float(score)))),
                 "classificacao_nps": classification,
                 "mensagem_melhoria": normalize_text(row["mensagem_melhoria"], "Sem comentário"),
@@ -594,6 +616,7 @@ def render_table_card(rows: list[dict[str, str]]) -> str:
               <td>{escape(row["cliente"])}</td>
               <td>{escape(row["nome_contato"])}</td>
               <td>{escape(row["csm"])}</td>
+              <td class="response-date-cell">{escape(row["data_resposta"])}</td>
               <td><span class="score-chip">{escape(row["nota_numerica"])}</span></td>
               <td><span class="pill {pill_class}">{escape(classification)}</span></td>
               <td class="message-cell">{escape(row["mensagem_melhoria"])}</td>
@@ -625,6 +648,7 @@ def render_table_card(rows: list[dict[str, str]]) -> str:
               <th>Cliente</th>
               <th>Nome do contato</th>
               <th>CSM</th>
+              <th class="col-response-date">Data da resposta</th>
               <th>Nota</th>
               <th>Classificação</th>
               <th>Mensagem de melhoria</th>

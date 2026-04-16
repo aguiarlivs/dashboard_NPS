@@ -68,6 +68,27 @@
     return `${formatNumber(value, decimals)}%`;
   }
 
+  function formatResponseDatetime(value) {
+    if (!value) {
+      return "-";
+    }
+
+    const parsedDate = new Date(value);
+    if (Number.isNaN(parsedDate.getTime())) {
+      return "-";
+    }
+
+    return new Intl.DateTimeFormat("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZone: "America/Sao_Paulo",
+    }).format(parsedDate).replace(",", "");
+  }
+
   function pluralizeResponses(total) {
     return total === 1 ? "1 resp." : `${total} resp.`;
   }
@@ -480,11 +501,13 @@
       const score = row.nota_numerica === null || row.nota_numerica === undefined ? "-" : String(row.nota_numerica);
       const classification = normalizeText(row.classificacao_nps, classifyScore(row.nota_numerica));
       const pillClass = classStyles[classification] || "";
+      const responseDate = formatResponseDatetime(row.data_resposta);
       return `
         <tr>
           <td>${escapeHtml(row.cliente)}</td>
           <td>${escapeHtml(row.nome_contato)}</td>
           <td>${escapeHtml(row.csm)}</td>
+          <td class="response-date-cell">${escapeHtml(responseDate)}</td>
           <td><span class="score-chip">${escapeHtml(score)}</span></td>
           <td><span class="pill ${pillClass}">${escapeHtml(classification)}</span></td>
           <td class="message-cell">${escapeHtml(row.mensagem_melhoria)}</td>
@@ -513,6 +536,7 @@
                 <th>Cliente</th>
                 <th>Nome do contato</th>
                 <th>CSM</th>
+                <th class="col-response-date">Data da resposta</th>
                 <th>Nota</th>
                 <th>Classificação</th>
                 <th>Mensagem de melhoria</th>

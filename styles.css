@@ -861,7 +861,7 @@ strong {
 
 table {
   width: 100%;
-  min-width: 980px;
+  min-width: 1120px;
   border-collapse: collapse;
 }
 
@@ -883,6 +883,17 @@ th {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   backdrop-filter: blur(10px);
+}
+
+.col-response-date {
+  min-width: 154px;
+}
+
+.response-date-cell {
+  min-width: 154px;
+  white-space: nowrap;
+  color: #334155;
+  font-variant-numeric: tabular-nums;
 }
 
 tbody tr:nth-child(even) {
