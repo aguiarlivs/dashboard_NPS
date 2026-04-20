@@ -56,3 +56,10 @@ htmlcov/
 *.tmp
 *.bak
 *.swp
+
+# 🔒 DADOS SENSÍVEIS - NUNCA COMMITAR
+# Dados CSV contêm informações de clientes, emails, telefones
+*.csv
+!README.md
+DASHBOARD/*.csv
+dados*.csv
