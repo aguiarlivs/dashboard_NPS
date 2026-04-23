@@ -49,6 +49,21 @@ Thumbs.db
 
 # Pytest
 .pytest_cache/
+
+# ==================== PROJETO ESPECÍFICO ====================
+
+# BACKEND - Código privado (não commitado)
+BACKEND/
+
+# DATA - Dados sensíveis + CSVs (LGPD - não commitado)
+DATA/
+*.csv
+!DASHBOARD/*.html
+
+# Dados antigos no DASHBOARD
+DASHBOARD/dados_*.csv
+DASHBOARD/nps_dados_*.csv
+.pytest_cache/
 .coverage
 htmlcov/
 
