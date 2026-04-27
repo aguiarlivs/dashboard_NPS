@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dashboard de NPS gerado a partir do arquivo CSV de respostas.">
+    <title>Dashboard NPS</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      
+    <header class="page-head">
+      <div class="page-head__content">
+        <h1 class="page-title">Dashboard NPS</h1>
+        <p class="page-subtitle">
+          Painel gerado exclusivamente a partir do arquivo <strong>nps_dados27abr.csv</strong>.
+          A taxa de resposta considera <strong>502</strong> envios válidos e o cálculo de NPS
+          usa a coluna <strong>nota_numerica</strong> como base oficial.
+        </p>
+      </div>
+      <p class="updated-at">Atualizado em 27/04/2026 às 10:36</p>
+    </header>
+    
+      
+    <section class="card card-monthly">
+      <div class="dashboard-slot" id="slot-monthly-nps"></div>
+    </section>
+    
+      
+    <section class="card card-filters">
+      <div class="filters-head">
+        <div class="filters-head__content">
+          <p class="eyebrow">Leitura executiva</p>
+          <h2 class="card-title">Filtros e Exportação</h2>
+          <p class="filters-description">
+            Refine a análise por responsável, classificação, nota, período ou texto e use a impressão para gerar uma versão limpa para board.
+          </p>
+        </div>
+        <div class="filters-actions">
+          <button type="button" class="toolbar-button toolbar-button--ghost" id="reset-filters">
+            Limpar filtros
+          </button>
+          <button type="button" class="toolbar-button toolbar-button--primary" id="print-dashboard">
+            Exportar / Imprimir
+          </button>
+        </div>
+      </div>
+      <form class="filters-grid" id="dashboard-filters" autocomplete="off">
+        <label class="filter-field">
+          <span class="filter-label">CSM</span>
+          <select id="filter-csm" name="csm">
+            <option value="">Todos os CSMs</option><option value="Bianca Madeira">Bianca Madeira</option><option value="Cristian Rodrigues">Cristian Rodrigues</option><option value="Gabrielle Marques">Gabrielle Marques</option><option value="Gabrielle S. Marques">Gabrielle S. Marques</option><option value="Nadson Pinheiro">Nadson Pinheiro</option><option value="Raquel Nascimento">Raquel Nascimento</option><option value="Suellen Ruperte">Suellen Ruperte</option><option value="Sem CSM">Sem CSM</option>
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="filter-label">Classificação</span>
+          <select id="filter-classificacao" name="classificacao">
+            <option value="">Todas as classificações</option><option value="Promotor">Promotor</option><option value="Neutro">Neutro</option><option value="Detrator">Detrator</option>
+          </select>
+        </label>
+        <label class="filter-field">
+          <span class="filter-label">Nota</span>
+          <select id="filter-nota" name="nota">
+            <option value="">Todas as notas</option><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option>
+          </select>
+        </label>
+        <label class="filter-field filter-field--date">
+          <span class="filter-label">Data inicial</span>
+          <input id="filter-data-inicial" name="data_inicial" type="date" />
+        </label>
+        <label class="filter-field filter-field--date">
+          <span class="filter-label">Data final</span>
+          <input id="filter-data-final" name="data_final" type="date" />
+        </label>
+        <label class="filter-field filter-field--search">
+          <span class="filter-label">Buscar cliente ou contato</span>
+          <input id="filter-busca" name="busca" type="search" placeholder="Ex.: Rede Shopping, Patricia..." />
+        </label>
+      </form>
+      <div class="filters-footer">
+        <div class="filter-summary" id="active-filter-summary" aria-live="polite"></div>
+        <p class="filters-note">
+          O período é aplicado por <strong>data_envio</strong> para envios e por <strong>data_resposta</strong> para respondentes; classificação e nota refinam os respondentes exibidos.
+        </p>
+      </div>
+      <noscript>
+        <p class="filters-note">Ative JavaScript para usar os filtros e a exportação.</p>
+      </noscript>
+    </section>
+    
+      
+    <section class="top-grid">
+      <div class="dashboard-slot" id="slot-gauge">
+        
+    <section class="card card-gauge">
+      <div class="card-head">
+        <div class="card-head__content">
+          <p class="eyebrow">Indicador principal</p>
+          <h2 class="card-title">NPS Final</h2>
+        </div>
+        
+    <span class="status-badge status-badge--excellence">
+      <span class="status-badge__dot" aria-hidden="true"></span>
+      <span>Excelência</span>
+    </span>
+    
+      </div>
+      <figure class="gauge-figure">
+        
+    <svg viewBox="0 0 680 460" class="gauge-svg" role="img" aria-label="NPS final 93">
+      <g><path d="M 92.00 320.00 A 248.00 248.00 0 0 1 340.00 72.00" class="gauge-arc" stroke="#ef4444"></path><path d="M 340.00 72.00 A 248.00 248.00 0 0 1 515.36 144.64" class="gauge-arc" stroke="#ff8a3d"></path><path d="M 515.36 144.64 A 248.00 248.00 0 0 1 569.12 225.09" class="gauge-arc" stroke="#f2ba14"></path><path d="M 569.12 225.09 A 248.00 248.00 0 0 1 588.00 320.00" class="gauge-arc" stroke="#4fbe6e"></path></g>
+      <g><text x="222.62" y="202.62" class="gauge-zone-label">Crítica</text><text x="403.53" y="166.64" class="gauge-zone-label">Aperfeiçoamento</text><text x="478.02" y="227.78" class="gauge-zone-label">Qualidade</text><text x="502.81" y="287.62" class="gauge-zone-label">Excelência</text></g>
+      <g><circle cx="80.00" cy="320.00" r="4" class="gauge-tick-dot"></circle><circle cx="156.15" cy="136.15" r="4" class="gauge-tick-dot gauge-tick-dot--minor"></circle><circle cx="340.00" cy="60.00" r="4" class="gauge-tick-dot"></circle><circle cx="523.85" cy="136.15" r="4" class="gauge-tick-dot"></circle><circle cx="580.21" cy="220.50" r="4" class="gauge-tick-dot gauge-tick-dot--minor"></circle><circle cx="600.00" cy="320.00" r="4" class="gauge-tick-dot"></circle></g>
+      <g><text x="58.00" y="320.00" class="gauge-tick-label">-100</text><text x="140.60" y="120.60" class="gauge-tick-label gauge-tick-label--minor">-50</text><text x="340.00" y="38.00" class="gauge-tick-label">0</text><text x="539.40" y="120.60" class="gauge-tick-label">50</text><text x="600.53" y="212.08" class="gauge-tick-label gauge-tick-label--minor">75</text><text x="622.00" y="320.00" class="gauge-tick-label">100</text></g>
+      <line x1="340" y1="320" x2="564.58" y2="294.70" class="gauge-needle"></line>
+      <circle cx="340" cy="320" r="14" class="gauge-pivot-outer"></circle>
+      <circle cx="340" cy="320" r="6" class="gauge-pivot-inner"></circle>
+      <text x="340" y="382" class="gauge-value nps-value--excellence">93</text>
+      <text x="340" y="409" class="gauge-base">Base NPS: 28 respostas com nota</text>
+    </svg>
+    
+      </figure>
+      <ul class="gauge-legend" aria-label="Composição do NPS">
+        
+        <li class="gauge-legend__item">
+          <span class="legend-dot legend-dot--promoter" aria-hidden="true"></span>
+          <span><strong>26</strong> Prom. (92,9%)</span>
+        </li>
+        
+        <li class="gauge-legend__item">
+          <span class="legend-dot legend-dot--neutral" aria-hidden="true"></span>
+          <span><strong>2</strong> Neut. (7,1%)</span>
+        </li>
+        
+        <li class="gauge-legend__item">
+          <span class="legend-dot legend-dot--detractor" aria-hidden="true"></span>
+          <span><strong>0</strong> Det. (0,0%)</span>
+        </li>
+        
+      </ul>
+      <p class="card-footnote">NPS = porcentagem de promotores (9-10) menos porcentagem de detratores (0-6).</p>
+    </section>
+    
+      </div>
+      <div class="dashboard-slot" id="slot-respondents">
+        
+    <section class="card metric-card metric-card--respondents">
+      <div class="card-head card-head--tight">
+        <div class="card-head__content">
+          <p class="eyebrow">Resumo</p>
+          <h2 class="card-title">Total de Respondentes</h2>
+        </div>
+      </div>
+      <div class="metric-value">28</div>
+      <p class="metric-subtitle">Respostas válidas com data_resposta preenchida.</p>
+    </section>
+    
+      </div>
+      <div class="dashboard-slot" id="slot-rate">
+        
+    <section class="card metric-card metric-card--rate">
+      <div class="card-head card-head--tight">
+        <div class="card-head__content">
+          <p class="eyebrow">Resumo</p>
+          <h2 class="card-title">Taxa de Resposta</h2>
+        </div>
+      </div>
+      <div class="metric-value">5,58%</div>
+      <p class="metric-subtitle">28 respostas válidas em 502 envios válidos.</p>
+    </section>
+    
+      </div>
+    </section>
+    
+      
+    <section class="section-grid">
+      <div class="dashboard-slot" id="slot-distribution">
+        
+    <section class="card card-wide card-distribution">
+      <div class="card-head">
+        <div class="card-head__content">
+          <p class="eyebrow">Volume por nota</p>
+          <h2 class="card-title">Distribuição por Nota (0-10)</h2>
+        </div>
+        <p class="chart-caption">28 respostas com nota válida</p>
+      </div>
+      <div class="bar-chart" aria-label="Gráfico de distribuição por nota">
+        
+            <div class="bar-column">
+              <div class="bar-value-label">0</div>
+              <div class="bar-track">
+                <div class="bar-fill bar-fill--detractor" style="height: 0.00%"></div>
+              </div>
+              <div class="bar-score-label">0</div>
+            </div>
+            
+            <div class="bar-column">
+              <div class="bar-value-label">0</div>
+              <div class="bar-track">
+                <div class="bar-fill bar-fill--detractor" style="height: 0.00%"></div>
+              </div>
+              <div class="bar-score-label">1</div>
+            </div>
+            
+            <div class="bar-column">
+              <div class="bar-value-label">0</div>
+              <div class="bar-track">
+                <div class="bar-fill bar-fill--detractor" style="height: 0.00%"></div>
+              </div>
+              <div class="bar-score-label">2</div>
+            </div>
+            
+            <div class="bar-column">
+              <div class="bar-value-label">0</div>
+              <div class="bar-track">
+                <div class="bar-fill bar-fill--detractor" style="height: 0.00%"></div>
+              </div>
+              <div class="bar-score-label">3</div>
+            </div>
+            
+            <div class="bar-column">
+              <div class="bar-value-label">0</div>
+              <div class="bar-track">
+                <div class="bar-fill bar-fill--detractor" style="height: 0.00%"></div>
+              </div>
+              <div class="bar-score-label">4</div>
+            </div>
+            
+            <div class="bar-column">
+              <div class="bar-value-label">0</div>
+              <div class="bar-track">
+                <div class="bar-fill bar-fill--detractor" style="height: 0.00%"></div>
+              </div>
+              <div class="bar-score-label">5</div>
+            </div>
+            
+            <div class="bar-column">
+              <div class="bar-value-label">0</div>
+              <div class="bar-track">
+                <div class="bar-fill bar-fill--detractor" style="height: 0.00%"></div>
+              </div>
+              <div class="bar-score-label">6</div>
+            </div>
+            
+            <div class="bar-column">
+              <div class="bar-value-label">0</div>
+              <div class="bar-track">
+                <div class="bar-fill bar-fill--neutral" style="height: 0.00%"></div>
+              </div>
+              <div class="bar-score-label">7</div>
+            </div>
+            
+            <div class="bar-column">
+              <div class="bar-value-label">2</div>
+              <div class="bar-track">
+                <div class="bar-fill bar-fill--neutral" style="height: 8.70%"></div>
+              </div>
+              <div class="bar-score-label">8</div>
+            </div>
+            
+            <div class="bar-column">
+              <div class="bar-value-label">3</div>
+              <div class="bar-track">
+                <div class="bar-fill bar-fill--promoter" style="height: 13.04%"></div>
+              </div>
+              <div class="bar-score-label">9</div>
+            </div>
+            
+            <div class="bar-column">
+              <div class="bar-value-label">23</div>
+              <div class="bar-track">
+                <div class="bar-fill bar-fill--promoter" style="height: 100.00%"></div>
+              </div>
+              <div class="bar-score-label">10</div>
+            </div>
+            
+      </div>
+    </section>
+    
+      </div>
+      <div class="dashboard-slot" id="slot-ranking">
+        
+    <section class="card card-ranking">
+      <div class="card-head">
+        <div class="card-head__content">
+          <p class="eyebrow">Performance por carteira</p>
+          <h2 class="card-title">Ranking CSM por NPS</h2>
+        </div>
+      </div>
+      <ol class="ranking-list">
+                <li class="ranking-item">
+                  <div class="ranking-position">1º</div>
+                  <div class="ranking-content">
+                    <div class="ranking-name">Cristian Rodrigues</div>
+                    <div class="ranking-meta">9 resp.</div>
+                  </div>
+                  <div class="ranking-badge status-badge--excellence">NPS 100</div>
+                </li>
+                
+                <li class="ranking-item">
+                  <div class="ranking-position">2º</div>
+                  <div class="ranking-content">
+                    <div class="ranking-name">Gabrielle Marques</div>
+                    <div class="ranking-meta">5 resp.</div>
+                  </div>
+                  <div class="ranking-badge status-badge--excellence">NPS 100</div>
+                </li>
+                
+                <li class="ranking-item">
+                  <div class="ranking-position">3º</div>
+                  <div class="ranking-content">
+                    <div class="ranking-name">Bianca Madeira</div>
+                    <div class="ranking-meta">4 resp.</div>
+                  </div>
+                  <div class="ranking-badge status-badge--excellence">NPS 100</div>
+                </li>
+                
+                <li class="ranking-item">
+                  <div class="ranking-position">4º</div>
+                  <div class="ranking-content">
+                    <div class="ranking-name">Nadson Pinheiro</div>
+                    <div class="ranking-meta">2 resp.</div>
+                  </div>
+                  <div class="ranking-badge status-badge--excellence">NPS 100</div>
+                </li>
+                
+                <li class="ranking-item">
+                  <div class="ranking-position">5º</div>
+                  <div class="ranking-content">
+                    <div class="ranking-name">Gabrielle S. Marques</div>
+                    <div class="ranking-meta">1 resp.</div>
+                  </div>
+                  <div class="ranking-badge status-badge--excellence">NPS 100</div>
+                </li>
+                
+                <li class="ranking-item">
+                  <div class="ranking-position">6º</div>
+                  <div class="ranking-content">
+                    <div class="ranking-name">Raquel Nascimento</div>
+                    <div class="ranking-meta">4 resp.</div>
+                  </div>
+                  <div class="ranking-badge status-badge--quality">NPS 75</div>
+                </li>
+                </ol>
+      <p class="card-footnote">Sem CSM: 3 respostas com nota válida ficaram fora do ranking.</p>
+    </section>
+    
+      </div>
+      <div class="dashboard-slot" id="slot-table">
+        
+    <section class="card card-wide card-table">
+      <div class="card-head">
+        <div class="card-head__content">
+          <p class="eyebrow">Base completa</p>
+          <h2 class="card-title">Todas as Respostas</h2>
+        </div>
+        <p class="chart-caption">28 respostas registradas</p>
+      </div>
+      <div class="table-shell table-shell--limited" data-row-limit="10">
+        <table>
+          <caption class="sr-only">Tabela com todas as respostas de NPS</caption>
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Nome do contato</th>
+              <th>CSM</th>
+              <th class="col-response-date">Data da resposta</th>
+              <th>Nota</th>
+              <th>Classificação</th>
+              <th>Mensagem de melhoria</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td>VIVA TELECOMUNICACOES &amp; PROVEDOR DE INTERNET LTDA</td>
+              <td>Joedson (Joo)</td>
+              <td>Gabrielle Marques</td>
+              <td class="response-date-cell">16/04/2026 14:19</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">Muito bom</td>
+            </tr>
+            
+            <tr>
+              <td>SECRELNET INFORMATICA - EIRELI</td>
+              <td>André Machado</td>
+              <td>Raquel Nascimento</td>
+              <td class="response-date-cell">16/04/2026 11:22</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">.</td>
+            </tr>
+            
+            <tr>
+              <td>NAVEGMAIS</td>
+              <td>Franciano</td>
+              <td>Gabrielle Marques</td>
+              <td class="response-date-cell">16/04/2026 11:08</td>
+              <td><span class="score-chip">9</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">Até o momento está sendo uma boa experiência</td>
+            </tr>
+            
+            <tr>
+              <td>ZAVAZ JANAUBA</td>
+              <td>Matheus Felipe</td>
+              <td>Cristian Rodrigues</td>
+              <td class="response-date-cell">16/04/2026 10:55</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">Estou bem satisfeito com a maneira que é hoje.</td>
+            </tr>
+            
+            <tr>
+              <td>Mais Banda Larga Telecom</td>
+              <td>Cristian Kehl</td>
+              <td>Nadson Pinheiro</td>
+              <td class="response-date-cell">16/04/2026 10:24</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">Muito bom</td>
+            </tr>
+            
+            <tr>
+              <td>Unetvale</td>
+              <td>Raquel Iastrenski Veneri</td>
+              <td>Gabrielle Marques</td>
+              <td class="response-date-cell">16/04/2026 10:15</td>
+              <td><span class="score-chip">9</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">.</td>
+            </tr>
+            
+            <tr>
+              <td>FR TELECOM</td>
+              <td>Fernando</td>
+              <td>Gabrielle Marques</td>
+              <td class="response-date-cell">16/04/2026 10:07</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">Como estou usando agora nao sei dizer ruso esta otimo.</td>
+            </tr>
+            
+            <tr>
+              <td>TURBONETT TELECOM</td>
+              <td>Brunno Lima Magalhaes</td>
+              <td>Raquel Nascimento</td>
+              <td class="response-date-cell">16/04/2026 10:04</td>
+              <td><span class="score-chip">8</span></td>
+              <td><span class="pill pill--neutral">Neutro</span></td>
+              <td class="message-cell">Nao quero responder</td>
+            </tr>
+            
+            <tr>
+              <td>Proxer Internet</td>
+              <td>Priscila Melo</td>
+              <td>Cristian Rodrigues</td>
+              <td class="response-date-cell">16/04/2026 10:01</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">O que acho que poderiam melhorar para mim já foi realizado, que era ter uum módulo focado em liderança, assim nós do RH conseguimos impactar primeiro os líderes entenderem o seu papel, para depois os demais terem esta vontade de buscar o conhecimento.</td>
+            </tr>
+            
+            <tr>
+              <td>Newline Telecom</td>
+              <td>Alisson Emanuel Casimiro Morais</td>
+              <td>Cristian Rodrigues</td>
+              <td class="response-date-cell">16/04/2026 10:01</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">Inclusão de mais cursos, principalmente para departamentos como: Financeiro, Fiscal, Contabilidade, Jurídico, etc. 
+
+Fornecimento de mais brindes, para diretores e líderes.</td>
+            </tr>
+            
+            <tr>
+              <td>Asernet Telecom</td>
+              <td>João Paulo</td>
+              <td>Raquel Nascimento</td>
+              <td class="response-date-cell">16/04/2026 10:01</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">Adoro utiliza-la</td>
+            </tr>
+            
+            <tr>
+              <td>UNI SERVIÇOS DE TECNOLOGIA DA INFORMAÇÃO LTDA</td>
+              <td>Renaldo</td>
+              <td>Gabrielle Marques</td>
+              <td class="response-date-cell">10/04/2026 11:33</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">Teria que abrir pra outros ramos também alem da telecom</td>
+            </tr>
+            
+            <tr>
+              <td>Click.com</td>
+              <td>Izabel</td>
+              <td>Bianca Madeira</td>
+              <td class="response-date-cell">10/04/2026 11:30</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">Mais cursos</td>
+            </tr>
+            
+            <tr>
+              <td>Pronet telecom</td>
+              <td>Daniella Cesar de Sousa</td>
+              <td>Bianca Madeira</td>
+              <td class="response-date-cell">10/04/2026 11:04</td>
+              <td><span class="score-chip">9</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">Manter a mesma ajuda inicial para motivar a equipe. Isso se torna um desafio para a empresa!</td>
+            </tr>
+            
+            <tr>
+              <td>INFOTECHY INTERNET VIA FIBRA</td>
+              <td>DEBORA FELTZ PEREIRA RAYCIK</td>
+              <td>Cristian Rodrigues</td>
+              <td class="response-date-cell">25/03/2026 05:24</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">Está bom</td>
+            </tr>
+            
+            <tr>
+              <td>nextall</td>
+              <td>Gabriel</td>
+              <td>Cristian Rodrigues</td>
+              <td class="response-date-cell">25/03/2026 05:13</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">Plataforma Excelente, contéudos dinâmicos.</td>
+            </tr>
+            
+            <tr>
+              <td>LM Telecom Ltda</td>
+              <td>Ingrid</td>
+              <td>Cristian Rodrigues</td>
+              <td class="response-date-cell">24/03/2026 14:58</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">Os cursos são muito bons e a equipe muito prestativa!</td>
+            </tr>
+            
+            <tr>
+              <td>INET</td>
+              <td>Hugo</td>
+              <td>Nadson Pinheiro</td>
+              <td class="response-date-cell">24/03/2026 13:45</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">Tudo perfeito</td>
+            </tr>
+            
+            <tr>
+              <td>Trevo Internet</td>
+              <td>WERLY MONTEIRO</td>
+              <td>Cristian Rodrigues</td>
+              <td class="response-date-cell">24/03/2026 13:34</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">Até o momento gosto bastante do que a fiberschol proporciona através da plataforma, e o que queria já está vindo que é cursos voltados a gestão do negócio liderança.</td>
+            </tr>
+            
+            <tr>
+              <td>NET WAY INFORMATICA</td>
+              <td>Karla Keller</td>
+              <td>Sem CSM</td>
+              <td class="response-date-cell">24/03/2026 13:12</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">show</td>
+            </tr>
+            
+            <tr>
+              <td>Ozmaps</td>
+              <td>Gina</td>
+              <td>Bianca Madeira</td>
+              <td class="response-date-cell">24/03/2026 13:04</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">seria muy bueno tener cursos en español!</td>
+            </tr>
+            
+            <tr>
+              <td>Galiza NET</td>
+              <td>Erick Rodrigues Mascarenhas</td>
+              <td>Bianca Madeira</td>
+              <td class="response-date-cell">24/03/2026 13:00</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">Mais eventos online</td>
+            </tr>
+            
+            <tr>
+              <td>Evottel</td>
+              <td>Caroline Perotto</td>
+              <td>Gabrielle S. Marques</td>
+              <td class="response-date-cell">24/03/2026 13:00</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">gosto do conteúdo, continuem essa plataforma excelente de ensino que são.</td>
+            </tr>
+            
+            <tr>
+              <td>Atel Telecom do Brasil Ltda.</td>
+              <td>Pedro Rh</td>
+              <td>Raquel Nascimento</td>
+              <td class="response-date-cell">24/03/2026 12:58</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">Variedade de cursos.</td>
+            </tr>
+            
+            <tr>
+              <td>Alternativa Provedor</td>
+              <td>Isaque Oliveira de Santana</td>
+              <td>Sem CSM</td>
+              <td class="response-date-cell">24/03/2026 12:01</td>
+              <td><span class="score-chip">8</span></td>
+              <td><span class="pill pill--neutral">Neutro</span></td>
+              <td class="message-cell">No momento, valor por usuario</td>
+            </tr>
+            
+            <tr>
+              <td>Grafnet LTDA</td>
+              <td>Adriano Rocha</td>
+              <td>Sem CSM</td>
+              <td class="response-date-cell">24/03/2026 11:55</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">Liberar cursos em todas as areas de telecom</td>
+            </tr>
+            
+            <tr>
+              <td>Sua Internet Ltda (D-kiros)</td>
+              <td>Mara</td>
+              <td>Cristian Rodrigues</td>
+              <td class="response-date-cell">24/03/2026 11:54</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">Nesse momento sem sugestoes</td>
+            </tr>
+            
+            <tr>
+              <td>REDE SHOPPING TELECOM</td>
+              <td>Patricia</td>
+              <td>Cristian Rodrigues</td>
+              <td class="response-date-cell">24/03/2026 11:54</td>
+              <td><span class="score-chip">10</span></td>
+              <td><span class="pill pill--promoter">Promotor</span></td>
+              <td class="message-cell">Até o momento esta suprindo as minhas espectativas e necessidades</td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </section>
+    
+      </div>
+      <div class="dashboard-slot" id="slot-undelivered">
+        
+    <section class="card card-wide card-undelivered">
+      <div class="card-head">
+        <div class="card-head__content">
+          <p class="eyebrow">Risco de entrega</p>
+          <h2 class="card-title">Envios sem Conexão no WhatsApp</h2>
+        </div>
+        <p class="chart-caption">
+          17 registros (3,39% da base filtrável)
+        </p>
+      </div>
+      <div class="table-shell table-shell--limited" data-row-limit="10">
+        <table>
+          <caption class="sr-only">Tabela com clientes sem conexão ativa no WhatsApp</caption>
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Nome do contato</th>
+              <th>CSM</th>
+              <th class="col-send-date">Data do envio</th>
+              <th>Status processamento</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td>ISP provedor de internet</td>
+              <td>Carlos Henrique</td>
+              <td>Sem CSM</td>
+              <td class="send-date-cell">23/04/2026 08:04</td>
+              <td><span class="delivery-status-chip">em andamento</span></td>
+            </tr>
+            
+            <tr>
+              <td>CONECT FIBER</td>
+              <td>Ivo Sodré Passos</td>
+              <td>Cristian Rodrigues</td>
+              <td class="send-date-cell">23/04/2026 08:03</td>
+              <td><span class="delivery-status-chip">em andamento</span></td>
+            </tr>
+            
+            <tr>
+              <td>LC VIRTUAL NET</td>
+              <td>Nelson</td>
+              <td>Nadson Pinheiro</td>
+              <td class="send-date-cell">23/04/2026 08:03</td>
+              <td><span class="delivery-status-chip">em andamento</span></td>
+            </tr>
+            
+            <tr>
+              <td>GSS TECNOLOGIES S.A.C.</td>
+              <td>Jorge ou Rute</td>
+              <td>Bianca Madeira</td>
+              <td class="send-date-cell">22/04/2026 08:22</td>
+              <td><span class="delivery-status-chip">em andamento</span></td>
+            </tr>
+            
+            <tr>
+              <td>Diginet Telecom - A T Magalhaes</td>
+              <td>Adam</td>
+              <td>Sem CSM</td>
+              <td class="send-date-cell">22/04/2026 08:12</td>
+              <td><span class="delivery-status-chip">em andamento</span></td>
+            </tr>
+            
+            <tr>
+              <td>Connectsul Telecomunicações</td>
+              <td>Karina</td>
+              <td>Gabrielle S. Marques</td>
+              <td class="send-date-cell">22/04/2026 08:06</td>
+              <td><span class="delivery-status-chip">em andamento</span></td>
+            </tr>
+            
+            <tr>
+              <td>Teste Livia - CSM</td>
+              <td>Sem contato</td>
+              <td>Bianca Madeira</td>
+              <td class="send-date-cell">16/04/2026 10:10</td>
+              <td><span class="delivery-status-chip">iniciado</span></td>
+            </tr>
+            
+            <tr>
+              <td>GIROCULTURAL LTDA</td>
+              <td>Natália Madi</td>
+              <td>Suellen Ruperte</td>
+              <td class="send-date-cell">16/04/2026 10:10</td>
+              <td><span class="delivery-status-chip">iniciado</span></td>
+            </tr>
+            
+            <tr>
+              <td>Click.com Telecomunicações LTDA ME</td>
+              <td>Izabel</td>
+              <td>Bianca Madeira</td>
+              <td class="send-date-cell">16/04/2026 10:09</td>
+              <td><span class="delivery-status-chip">iniciado</span></td>
+            </tr>
+            
+            <tr>
+              <td>CB NET TELECOMUNICACOES LTDA</td>
+              <td>Valdomiro</td>
+              <td>Sem CSM</td>
+              <td class="send-date-cell">16/04/2026 10:08</td>
+              <td><span class="delivery-status-chip">iniciado</span></td>
+            </tr>
+            
+            <tr>
+              <td>RG PROVIDER LTDA</td>
+              <td>Rogerio Ferreira dos Santos</td>
+              <td>Cristian Rodrigues</td>
+              <td class="send-date-cell">16/04/2026 10:08</td>
+              <td><span class="delivery-status-chip">iniciado</span></td>
+            </tr>
+            
+            <tr>
+              <td>Provale TI</td>
+              <td>Jéssica</td>
+              <td>Cristian Rodrigues</td>
+              <td class="send-date-cell">16/04/2026 10:07</td>
+              <td><span class="delivery-status-chip">iniciado</span></td>
+            </tr>
+            
+            <tr>
+              <td>Si Net</td>
+              <td>Robert</td>
+              <td>Bianca Madeira</td>
+              <td class="send-date-cell">16/04/2026 10:07</td>
+              <td><span class="delivery-status-chip">iniciado</span></td>
+            </tr>
+            
+            <tr>
+              <td>Multiplic Comunicação e tecnologia LTDA</td>
+              <td>Kathelyn</td>
+              <td>Cristian Rodrigues</td>
+              <td class="send-date-cell">16/04/2026 10:06</td>
+              <td><span class="delivery-status-chip">iniciado</span></td>
+            </tr>
+            
+            <tr>
+              <td>IDEAL NET</td>
+              <td>Junior</td>
+              <td>Nadson Pinheiro</td>
+              <td class="send-date-cell">16/04/2026 10:05</td>
+              <td><span class="delivery-status-chip">iniciado</span></td>
+            </tr>
+            
+            <tr>
+              <td>ULTRANET</td>
+              <td>Edilson Maier Campos</td>
+              <td>Sem CSM</td>
+              <td class="send-date-cell">24/03/2026 12:59</td>
+              <td><span class="delivery-status-chip">iniciado</span></td>
+            </tr>
+            
+            <tr>
+              <td>ULTRANET (ultranetpa)</td>
+              <td>Edilson Maier Campos</td>
+              <td>Sem CSM</td>
+              <td class="send-date-cell">24/03/2026 12:58</td>
+              <td><span class="delivery-status-chip">iniciado</span></td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+      <p class="card-footnote">Critério aplicado: coluna <strong>wa_id</strong> ausente ou igual a <strong>undefined</strong>.</p>
+    </section>
+    
+      </div>
+    </section>
+    
+    </main>
+    <script id="dashboard-data" type="application/json">{"sentRecords": [{"cliente": "ONNEXX", "nome_contato": "Lucas", "csm": "Nadson Pinheiro", "data_envio": "2026-04-23T11:06:27+00:00"}, {"cliente": "Arcplus Net", "nome_contato": "Pedro", "csm": "Bianca Madeira", "data_envio": "2026-04-23T11:05:58+00:00"}, {"cliente": "PBS TELECOM", "nome_contato": "Everton", "csm": "Bianca Madeira", "data_envio": "2026-04-23T11:05:29+00:00"}, {"cliente": "INTERLIGPRO", "nome_contato": "Vitor Bruno de Barros Rodrigues", "csm": "Nadson Pinheiro", "data_envio": "2026-04-23T11:05:00+00:00"}, {"cliente": "UNIMAX TELECOM", "nome_contato": "Enio", "csm": "Gabrielle Marques", "data_envio": "2026-04-23T11:04:31+00:00"}, {"cliente": "ISP provedor de internet", "nome_contato": "Carlos Henrique", "csm": "Sem CSM", "data_envio": "2026-04-23T11:04:01+00:00"}, {"cliente": "CONECT FIBER", "nome_contato": "Ivo Sodré Passos", "csm": "Cristian Rodrigues", "data_envio": "2026-04-23T11:03:32+00:00"}, {"cliente": "LC VIRTUAL NET", "nome_contato": "Nelson", "csm": "Nadson Pinheiro", "data_envio": "2026-04-23T11:03:03+00:00"}, {"cliente": "GPR FIBRA", "nome_contato": "RICARDO REIS SANTOS", "csm": "Nadson Pinheiro", "data_envio": "2026-04-23T11:02:34+00:00"}, {"cliente": "Mais Connect", "nome_contato": "Kleiton", "csm": "Sem CSM", "data_envio": "2026-04-23T11:02:05+00:00"}, {"cliente": "Provedor Eldorado telecom", "nome_contato": "Victoria Luiza de Souza Andrade", "csm": "Sem CSM", "data_envio": "2026-04-23T11:01:36+00:00"}, {"cliente": "Rolim net", "nome_contato": "Karol", "csm": "Sem CSM", "data_envio": "2026-04-23T11:01:07+00:00"}, {"cliente": "DStech Internet", "nome_contato": "Christian", "csm": "Bianca Madeira", "data_envio": "2026-04-22T11:23:01+00:00"}, {"cliente": "ONE (Empresa de soluções)", "nome_contato": "Daiane", "csm": "Gabrielle S. Marques", "data_envio": "2026-04-22T11:22:32+00:00"}, {"cliente": "GSS TECNOLOGIES S.A.C.", "nome_contato": "Jorge ou Rute", "csm": "Bianca Madeira", "data_envio": "2026-04-22T11:22:03+00:00"}, {"cliente": "Info Projekt", "nome_contato": "William de Oliveira Santos", "csm": "Gabrielle S. Marques", "data_envio": "2026-04-22T11:21:34+00:00"}, {"cliente": "NET BAIO", "nome_contato": "GILMAR JOSE DA SILVA", "csm": "Bianca Madeira", "data_envio": "2026-04-22T11:21:05+00:00"}, {"cliente": "FAINET", "nome_contato": "Jurandi", "csm": "Bianca Madeira", "data_envio": "2026-04-22T11:20:36+00:00"}, {"cliente": "Netfibra (LS Conect Telecom)", "nome_contato": "Jane", "csm": "Bianca Madeira", "data_envio": "2026-04-22T11:20:06+00:00"}, {"cliente": "SELLNET TELECOM (Sell Net)", "nome_contato": "Luiz Brizola", "csm": "Raquel Nascimento", "data_envio": "2026-04-22T11:19:37+00:00"}, {"cliente": "supernet", "nome_contato": "Weverton", "csm": "Cristian Rodrigues", "data_envio": "2026-04-22T11:19:08+00:00"}, {"cliente": "SD NET", "nome_contato": "ABELA MARIA DANCZUK", "csm": "Sem CSM", "data_envio": "2026-04-22T11:18:39+00:00"}, {"cliente": "nova mais", "nome_contato": "Ravel", "csm": "Cristian Rodrigues", "data_envio": "2026-04-22T11:18:10+00:00"}, {"cliente": "ESADINET", "nome_contato": "Kaue", "csm": "Cristian Rodrigues", "data_envio": "2026-04-22T11:17:41+00:00"}, {"cliente": "SOW - SHARE OWN WORLD", "nome_contato": "Felipe", "csm": "Cristian Rodrigues", "data_envio": "2026-04-22T11:17:11+00:00"}, {"cliente": "WIUP - RLINE SOLUTIONS", "nome_contato": "Carlos Moritz", "csm": "Cristian Rodrigues", "data_envio": "2026-04-22T11:16:42+00:00"}, {"cliente": "Fernando Oliveira Cambuhy", "nome_contato": "Elisa", "csm": "Cristian Rodrigues", "data_envio": "2026-04-22T11:16:13+00:00"}, {"cliente": "JDCONECT", "nome_contato": "Gerson Barbosa Veras Junior", "csm": "Gabrielle S. Marques", "data_envio": "2026-04-22T11:15:44+00:00"}, {"cliente": "Omegasul", "nome_contato": "Enoque", "csm": "Cristian Rodrigues", "data_envio": "2026-04-22T11:15:15+00:00"}, {"cliente": "Megapix Provedor de Internet", "nome_contato": "Lucas Sampaio", "csm": "Nadson Pinheiro", "data_envio": "2026-04-22T11:14:46+00:00"}, {"cliente": "R2NET", "nome_contato": "Matheus", "csm": "Cristian Rodrigues", "data_envio": "2026-04-22T11:14:16+00:00"}, {"cliente": "DELTA ATIVA", "nome_contato": "Daniele Miorando", "csm": "Cristian Rodrigues", "data_envio": "2026-04-22T11:13:47+00:00"}, {"cliente": "VIP NET (R. G. Menezes de Araujo Informatica)", "nome_contato": "Rauny Garcia", "csm": "Sem CSM", "data_envio": "2026-04-22T11:13:18+00:00"}, {"cliente": "Diginet Telecom - A T Magalhaes", "nome_contato": "Adam", "csm": "Sem CSM", "data_envio": "2026-04-22T11:12:49+00:00"}, {"cliente": "Pantanal - Brito & Gonçalves LTDA ME", "nome_contato": "Henrique da Silva Brito", "csm": "Sem CSM", "data_envio": "2026-04-22T11:12:20+00:00"}, {"cliente": "BRASIL NET POWER", "nome_contato": "Wener Carlos lemes teixeira", "csm": "Bianca Madeira", "data_envio": "2026-04-22T11:11:51+00:00"}, {"cliente": "NOXNET PROVEDOR (FJM TELECOM LTDA)", "nome_contato": "Kelly", "csm": "Bianca Madeira", "data_envio": "2026-04-22T11:11:22+00:00"}, {"cliente": "NEWCO (itaon)", "nome_contato": "Levi Samuel", "csm": "Bianca Madeira", "data_envio": "2026-04-22T11:10:52+00:00"}, {"cliente": "Nave Net", "nome_contato": "emerson", "csm": "Cristian Rodrigues", "data_envio": "2026-04-22T11:10:23+00:00"}, {"cliente": "Arobanet", "nome_contato": "Lione", "csm": "Cristian Rodrigues", "data_envio": "2026-04-22T11:09:54+00:00"}, {"cliente": "OPCAOTELECOM TELECOMUNICACOES S/A", "nome_contato": "Marcelo", "csm": "Cristian Rodrigues", "data_envio": "2026-04-22T11:09:25+00:00"}, {"cliente": "Rede online internet", "nome_contato": "Daniele Soares", "csm": "Gabrielle S. Marques", "data_envio": "2026-04-22T11:08:56+00:00"}, {"cliente": "Pontonet", "nome_contato": "Alexandre de Jesus Borges", "csm": "Cristian Rodrigues", "data_envio": "2026-04-22T11:08:27+00:00"}, {"cliente": "Unonet", "nome_contato": "renisio", "csm": "Bianca Madeira", "data_envio": "2026-04-22T11:07:58+00:00"}, {"cliente": "Nevoli Telecom", "nome_contato": "Edite Lopes", "csm": "Sem CSM", "data_envio": "2026-04-22T11:07:28+00:00"}, {"cliente": "Ciabrasnet", "nome_contato": "Glacieli", "csm": "Cristian Rodrigues", "data_envio": "2026-04-22T11:06:59+00:00"}, {"cliente": "Connectsul Telecomunicações", "nome_contato": "Karina", "csm": "Gabrielle S. Marques", "data_envio": "2026-04-22T11:06:30+00:00"}, {"cliente": "VELLO", "nome_contato": "Danilo", "csm": "Sem CSM", "data_envio": "2026-04-22T11:06:01+00:00"}, {"cliente": "Netcell", "nome_contato": "Josivaldo", "csm": "Cristian Rodrigues", "data_envio": "2026-04-22T11:05:32+00:00"}, {"cliente": "Essa internet", "nome_contato": "roberta", "csm": "Nadson Pinheiro", "data_envio": "2026-04-22T11:05:03+00:00"}, {"cliente": "TEUTONET", "nome_contato": "Agnes Santos", "csm": "Bianca Madeira", "data_envio": "2026-04-22T11:04:33+00:00"}, {"cliente": "Gruposa - Capelanet", "nome_contato": "Sérgio", "csm": "Bianca Madeira", "data_envio": "2026-04-22T11:04:04+00:00"}, {"cliente": "CONTILNET TELECOM", "nome_contato": "Antônio Paixão", "csm": "Sem CSM", "data_envio": "2026-04-22T11:03:35+00:00"}, {"cliente": "GRUPO VIA FIBRA (VSC TELECOM LTDA)", "nome_contato": "Vanderlei Correia", "csm": "Sem CSM", "data_envio": "2026-04-22T11:03:06+00:00"}, {"cliente": "REDE BJNET TELECOMUNICACOES LTDA", "nome_contato": "Paulo", "csm": "Sem CSM", "data_envio": "2026-04-22T11:02:37+00:00"}, {"cliente": "BMI SERVICOS DIGITAIS", "nome_contato": "Rênea Prado", "csm": "Sem CSM", "data_envio": "2026-04-22T11:02:07+00:00"}, {"cliente": "ELETEL NET (BRENDON C B DE CASTRO)", "nome_contato": "BRENDON", "csm": "Sem CSM", "data_envio": "2026-04-22T11:01:38+00:00"}, {"cliente": "VNET TECNOLOGIA (VOANET)", "nome_contato": "Rafael Assis", "csm": "Bianca Madeira", "data_envio": "2026-04-22T11:01:09+00:00"}, {"cliente": "TOP TELECOM", "nome_contato": "Davi Nunes - 81992245194", "csm": "Suellen Ruperte", "data_envio": "2026-04-16T13:10:55+00:00"}, {"cliente": "Uai Fibra Net", "nome_contato": "Bruno Vieira Bicalho - 38 9922-2320", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:10:53+00:00"}, {"cliente": "LINKVALE", "nome_contato": "Victor -12 98191-5675", "csm": "Sem CSM", "data_envio": "2026-04-16T13:10:51+00:00"}, {"cliente": "Falou Telecom", "nome_contato": "Ariadny Flávia", "csm": "Suellen Ruperte", "data_envio": "2026-04-16T13:10:50+00:00"}, {"cliente": "Asernet Telecom", "nome_contato": "João Paulo", "csm": "Suellen Ruperte", "data_envio": "2026-04-16T13:10:48+00:00"}, {"cliente": "Reyvi Internet", "nome_contato": "Leano", "csm": "Sem CSM", "data_envio": "2026-04-16T13:10:47+00:00"}, {"cliente": "Teste Livia - CSM", "nome_contato": "Sem contato", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:10:44+00:00"}, {"cliente": "GIROCULTURAL LTDA", "nome_contato": "Natália Madi", "csm": "Suellen Ruperte", "data_envio": "2026-04-16T13:10:10+00:00"}, {"cliente": "Click.com Telecomunicações LTDA ME", "nome_contato": "Izabel", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:09:08+00:00"}, {"cliente": "CB NET TELECOMUNICACOES LTDA", "nome_contato": "Valdomiro", "csm": "Sem CSM", "data_envio": "2026-04-16T13:08:37+00:00"}, {"cliente": "RG PROVIDER LTDA", "nome_contato": "Rogerio Ferreira dos Santos", "csm": "Cristian Rodrigues", "data_envio": "2026-04-16T13:08:05+00:00"}, {"cliente": "Provale TI", "nome_contato": "Jéssica", "csm": "Cristian Rodrigues", "data_envio": "2026-04-16T13:07:35+00:00"}, {"cliente": "Si Net", "nome_contato": "Robert", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:07:02+00:00"}, {"cliente": "Multiplic Comunicação e tecnologia LTDA", "nome_contato": "Kathelyn", "csm": "Cristian Rodrigues", "data_envio": "2026-04-16T13:06:30+00:00"}, {"cliente": "IDEAL NET", "nome_contato": "Junior", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:05:59+00:00"}, {"cliente": "Gamenet", "nome_contato": "Cleiton Fibo", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:04:27+00:00"}, {"cliente": "FR TELECOM", "nome_contato": "Fernando", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:04:26+00:00"}, {"cliente": "Reyvi Internet", "nome_contato": "Leano", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:04:24+00:00"}, {"cliente": "Webtelecom - Sandro Costa da Paixao", "nome_contato": "Ivana Silva Galdino Lins", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:04:23+00:00"}, {"cliente": "Descalnet Provedor", "nome_contato": "Douglas", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:04:20+00:00"}, {"cliente": "Impactus internet", "nome_contato": "Alan", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:04:19+00:00"}, {"cliente": "Cnet", "nome_contato": "Clerison", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:04:18+00:00"}, {"cliente": "SMART TELECOM", "nome_contato": "MIGUEL MONTANARI FARIA DE QUEIROZ - 34 9800-2021", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:04:15+00:00"}, {"cliente": "DCESARY LOCAÇÕES E SERVIÇOS", "nome_contato": "Vinicios", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:04:14+00:00"}, {"cliente": "MRT LINE", "nome_contato": "Tiago Motta", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:04:12+00:00"}, {"cliente": "Grande Net (C P Comunicacao Ltda)", "nome_contato": "Dantas Prado", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:04:10+00:00"}, {"cliente": "Veloce Telecom", "nome_contato": "Paulo", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:04:09+00:00"}, {"cliente": "GDNET PROVEDOR", "nome_contato": "Flavio", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:04:07+00:00"}, {"cliente": "SPEEDY INFO", "nome_contato": "Handrigo", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:04:05+00:00"}, {"cliente": "Mega Telecom", "nome_contato": "Kelvin", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:04:04+00:00"}, {"cliente": "lotec fibra", "nome_contato": "sandro", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:04:02+00:00"}, {"cliente": "FYBERLINK", "nome_contato": "Gabrielly", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:04:01+00:00"}, {"cliente": "FASTNET", "nome_contato": "Daniel", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:04:00+00:00"}, {"cliente": "osnet", "nome_contato": "Kaique", "csm": "Cristian Rodrigues", "data_envio": "2026-04-16T13:03:58+00:00"}, {"cliente": "FIBERCOM", "nome_contato": "Adriano Leopoldino", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:03:57+00:00"}, {"cliente": "Garden Telecom", "nome_contato": "Adao", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:03:56+00:00"}, {"cliente": "NetCaster", "nome_contato": "Mauro C. Fileto", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:03:55+00:00"}, {"cliente": "UNIMAX TELECOM", "nome_contato": "Enio", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:03:53+00:00"}, {"cliente": "Ligeirinha Soluções de Internet Ltda", "nome_contato": "Rodolfo Mendonça", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:03:52+00:00"}, {"cliente": "AGILITY TELECOM (M A M DA SILVA MULTIMIDIA)", "nome_contato": "Mickael", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:03:50+00:00"}, {"cliente": "Click Connection Serviço de Internet e Informáti", "nome_contato": "Luiz", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:03:48+00:00"}, {"cliente": "DStech Internet", "nome_contato": "Christian", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:03:47+00:00"}, {"cliente": "NewTech.Net", "nome_contato": "Claudia Silva Lopes Sete", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:03:46+00:00"}, {"cliente": "Nti telecom - NTI Equipamentos para Escritorio LTDA", "nome_contato": "Gustavo Dal Piva", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:03:45+00:00"}, {"cliente": "ClickPlay Provedor de Acesso LTDA", "nome_contato": "Francisco Gomes de Carvalho", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:03:43+00:00"}, {"cliente": "Km Telecom", "nome_contato": "Kleber", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:03:42+00:00"}, {"cliente": "Via Certa Digital (Bisi Informática LTDA)", "nome_contato": "Ulisses Bisinella", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:03:41+00:00"}, {"cliente": "WebLink Fibra", "nome_contato": "SIllas", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:03:40+00:00"}, {"cliente": "STI Telecom (ED de Sousa Telecomunicações)", "nome_contato": "Franklin", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:38+00:00"}, {"cliente": "Tempernet Telecom", "nome_contato": "Bryan Kevin", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:37+00:00"}, {"cliente": "Innet Internet", "nome_contato": "Juliano", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:36+00:00"}, {"cliente": "VTEK TELECOM LTDA", "nome_contato": "Vanilson", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:35+00:00"}, {"cliente": "REGIONAL TELECOM", "nome_contato": "José", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:34+00:00"}, {"cliente": "Ultraweb Telecom (Ultra telecom)", "nome_contato": "Marcos", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:32+00:00"}, {"cliente": "Computex Internet", "nome_contato": "Antônio Orione", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:31+00:00"}, {"cliente": "Brasil Fibra Telecomunicação e Multimídia Ltda", "nome_contato": "Wellington Fernandes Ramos", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:30+00:00"}, {"cliente": "TURBONETT TELECOM", "nome_contato": "Brunno Lima Magalhaes", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:29+00:00"}, {"cliente": "Conecta Minas Gerais Ltda.", "nome_contato": "Victor Imbroisi", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:27+00:00"}, {"cliente": "Telecomunicacoes Nordeste LTDA - TVN", "nome_contato": "Jeferson", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:26+00:00"}, {"cliente": "MZL telecom", "nome_contato": "Jaqueline Massoni Mozol", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:25+00:00"}, {"cliente": "ATENDNET FIBRA", "nome_contato": "Davi", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:24+00:00"}, {"cliente": "IZ1 TELECOM", "nome_contato": "Sabrina", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:03:22+00:00"}, {"cliente": "Rvnetwork (RENIS ROMULO PINTO DE SOUSA)", "nome_contato": "Valdivino", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:03:21+00:00"}, {"cliente": "NETSV Serviço de Comunicação Multimídia ltda", "nome_contato": "Iuri Possa", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:20+00:00"}, {"cliente": "SEITEL TELECOM", "nome_contato": "MARCELO", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:03:19+00:00"}, {"cliente": "A2 TELECOM EIRELI ME", "nome_contato": "Ataildo", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:03:17+00:00"}, {"cliente": "POWER NET TELECOM LTDA", "nome_contato": "MARCOS ANTÔNIO DA SILVA", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:16+00:00"}, {"cliente": "JN INFORMATICA (pinheiro e silva informática)", "nome_contato": "Junior Silva", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:15+00:00"}, {"cliente": "MAB FIBRA", "nome_contato": "Nickson", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:14+00:00"}, {"cliente": "CONNECT SOLUÇÕES EM TELECOMUNICAÇÕES LTDA.", "nome_contato": "Odoncleber Santana", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:12+00:00"}, {"cliente": "VEX TELECOM - SINAL DE QUALIDADE", "nome_contato": "Suyanne", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:03:11+00:00"}, {"cliente": "Telmig", "nome_contato": "Wallace", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:03:09+00:00"}, {"cliente": "SMART9 INTERNET", "nome_contato": "Fernanda", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:08+00:00"}, {"cliente": "I SNET TELECOMUNICAÇOES LTDA ME", "nome_contato": "Sebastião", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:03:07+00:00"}, {"cliente": "WLAN INTERNET BANDA LARGA LTDA", "nome_contato": "KEVIN MESQUITA", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:03:05+00:00"}, {"cliente": "STARNET PROVEDOR DE INTERNET LTDA", "nome_contato": "Gean", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:03+00:00"}, {"cliente": "TG Telecomunicações LTDA (Netix)", "nome_contato": "Maikon", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:03:02+00:00"}, {"cliente": "CB NET TELECOMUNICACOES LTDA", "nome_contato": "Valdomiro", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:03:01+00:00"}, {"cliente": "Falou Telecom", "nome_contato": "Ariadny Flávia", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:02:59+00:00"}, {"cliente": "GIROEDUCA - GIROCULTURAL LTDA", "nome_contato": "Natália Madi", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:02:58+00:00"}, {"cliente": "TOP TELECOM", "nome_contato": "Davi Nunes", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:02:57+00:00"}, {"cliente": "NAVEGMAIS", "nome_contato": "Franciano", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:02:56+00:00"}, {"cliente": "Holistica Internet", "nome_contato": "Helder", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:02:55+00:00"}, {"cliente": "ConectSul", "nome_contato": "Geisse", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:02:53+00:00"}, {"cliente": "LINKVALE", "nome_contato": "Victor", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:02:52+00:00"}, {"cliente": "DOTCOM (CSC MOC)", "nome_contato": "Patrick Rerody Martins", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:02:51+00:00"}, {"cliente": "CONECT FIBER", "nome_contato": "Ivo Sodré Passos", "csm": "Cristian Rodrigues", "data_envio": "2026-04-16T13:02:50+00:00"}, {"cliente": "Provedor Eldorado telecom", "nome_contato": "Victoria Luiza de Souza Andrade", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:02:49+00:00"}, {"cliente": "IMPERTECH TELECOM", "nome_contato": "Dayanne Dominick Escocio e Souza", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:02:47+00:00"}, {"cliente": "TBK INTERNET", "nome_contato": "Douglas - 55 51 9895-9553", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:02:46+00:00"}, {"cliente": "Gtsnet", "nome_contato": "angela cristina - +55 86 8873-9630", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:02:45+00:00"}, {"cliente": "Uai Fibra Net", "nome_contato": "Bruno Vieira Bicalho", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:02:44+00:00"}, {"cliente": "INNOVA INTERNET", "nome_contato": "Wellington", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:02:43+00:00"}, {"cliente": "Unetvale", "nome_contato": "Raquel Iastrenski Veneri", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:02:42+00:00"}, {"cliente": "itacell telecom", "nome_contato": "William", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:02:40+00:00"}, {"cliente": "CLOUDI PROVEDOR DE INTERNET", "nome_contato": "Rennan", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:02:39+00:00"}, {"cliente": "GLPNET (GLP SUPORTE TECNICO E TECNOLOGIA DA INFORMAÇÃO LTDA)", "nome_contato": "Giani", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:02:38+00:00"}, {"cliente": "UP NET PROVEDOR DE ACESSO E TELECOMUNICAÇÕES LTDA", "nome_contato": "Douglas", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:02:37+00:00"}, {"cliente": "ConectMais (C+)", "nome_contato": "Thamyres", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:02:35+00:00"}, {"cliente": "Wlan Network Ltda Me", "nome_contato": "Fernando Pavaneli", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:02:34+00:00"}, {"cliente": "SPEED TELECOM", "nome_contato": "Gonzaga Filho", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:02:32+00:00"}, {"cliente": "DW Solutions Internet Banda Larga", "nome_contato": "Luan", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:02:31+00:00"}, {"cliente": "Conect Provedor de Internet", "nome_contato": "Taiza", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:02:30+00:00"}, {"cliente": "VERTICAL NET", "nome_contato": "Adriano", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:02:28+00:00"}, {"cliente": "Gente Digital", "nome_contato": "Joaquina Mariza", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:02:27+00:00"}, {"cliente": "GPR FIBRA", "nome_contato": "RICARDO REIS SANTOS", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:02:25+00:00"}, {"cliente": "Heptanet", "nome_contato": "Mariza", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:02:24+00:00"}, {"cliente": "Network Internet.", "nome_contato": "Fernando Selinger", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:02:22+00:00"}, {"cliente": "MEGA WEB PROVIDER", "nome_contato": "Thor", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:02:21+00:00"}, {"cliente": "Soft SystemInformatica LTDA", "nome_contato": "Gilmar", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:02:19+00:00"}, {"cliente": "TUDOFIBRA (M.B. SERVIÇOS EM TELECOMUNICAÇÕES LTDA)", "nome_contato": "MAURICIO", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:02:18+00:00"}, {"cliente": "VIVA TELECOMUNICACOES & PROVEDOR DE INTERNET LTDA", "nome_contato": "Joedson (Joo)", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:02:16+00:00"}, {"cliente": "SPEEDMAX INTERNET FIBRA", "nome_contato": "GEISSON HUGO DE LIMA SEMIM", "csm": "Cristian Rodrigues", "data_envio": "2026-04-16T13:02:15+00:00"}, {"cliente": "ZAVAZ JANAUBA", "nome_contato": "Matheus Felipe", "csm": "Cristian Rodrigues", "data_envio": "2026-04-16T13:02:13+00:00"}, {"cliente": "Agility Telecom Passira (Kadim Connect)", "nome_contato": "William", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:02:12+00:00"}, {"cliente": "Hexa Telecom", "nome_contato": "Emerson Santos", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:02:10+00:00"}, {"cliente": "NETULTRA", "nome_contato": "Igor", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:02:09+00:00"}, {"cliente": "Dn Telecom Ltda (tsunami fibra)", "nome_contato": "David", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:02:08+00:00"}, {"cliente": "Rede SulNet", "nome_contato": "Elias", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:02:06+00:00"}, {"cliente": "Fibron", "nome_contato": "Rodolfo", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:02:04+00:00"}, {"cliente": "REDESUB SERVIÇOS & INTERNET LTDA", "nome_contato": "Andrezza", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:02:03+00:00"}, {"cliente": "M2B SOLUCOES EM TECNOLOGIA EIRELI", "nome_contato": "Thiago", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:02:01+00:00"}, {"cliente": "JR Telecom", "nome_contato": "Junior", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:59+00:00"}, {"cliente": "Brasilink Serviços Eireli", "nome_contato": "Thiago", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:57+00:00"}, {"cliente": "CN-INTERNET", "nome_contato": "Eder", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:56+00:00"}, {"cliente": "Redel internet - CST - SERVICOS DE INFORMATICA E TELECOMUNICACOES", "nome_contato": "Gustavo", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:01:54+00:00"}, {"cliente": "ALTANET SERVIÇOS E TELECOMUNICAÇÕES LTDA EIRELLE", "nome_contato": "Paulo", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:52+00:00"}, {"cliente": "Even Telecom Ltda", "nome_contato": "Giovane", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:51+00:00"}, {"cliente": "Terres Telecom - S C Terres e Cia Ltda", "nome_contato": "Sirilo", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:49+00:00"}, {"cliente": "M.M. DA SILVA Arealnet (Diferencial.net)", "nome_contato": "Mauro", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:48+00:00"}, {"cliente": "COELHO TECNOLOGIA EIRELI", "nome_contato": "Luiz Coelho", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:47+00:00"}, {"cliente": "SPEED SERVIÇOS DIGITAIS LTDA Speed Travel", "nome_contato": "Kely", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:45+00:00"}, {"cliente": "IBSOL TELECOM LTDA ME", "nome_contato": "Juary", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:43+00:00"}, {"cliente": "SCNET EQUIPAMENTOS DE INFORMATICA EIRELLI", "nome_contato": "Vanderlei", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:42+00:00"}, {"cliente": "UltraTelecom provedora de internet", "nome_contato": "Gustavo Zanatta", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:40+00:00"}, {"cliente": "POYNTNET", "nome_contato": "ailson", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:39+00:00"}, {"cliente": "Iclick Telecom", "nome_contato": "Jorge", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:37+00:00"}, {"cliente": "Eltec Web Provedor de Internet Ltda", "nome_contato": "Elivelton", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:36+00:00"}, {"cliente": "Une Provedor de Internet Lgt61 Eireli", "nome_contato": "Carlos Miguel", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:34+00:00"}, {"cliente": "IVR INFORMATICA LTDA", "nome_contato": "Pedro", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:33+00:00"}, {"cliente": "CONECTIVA INTERNET E TELECOMUNICACOES LTDA", "nome_contato": "Angelo", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:31+00:00"}, {"cliente": "DTEL TELECOM LTDA", "nome_contato": "Ádila (NUMERO GERAL DA EMPRESA)", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:30+00:00"}, {"cliente": "OAI EIRELI", "nome_contato": "Gustavo", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:28+00:00"}, {"cliente": "GIGALINKS TELECOM INTERNET SOLUTION PROVIDER LTDA –ME", "nome_contato": "Giordana Dias Medeiros", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:01:26+00:00"}, {"cliente": "MAFRA Telecom", "nome_contato": "MARCELO", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:01:25+00:00"}, {"cliente": "Mundial station", "nome_contato": "William", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:23+00:00"}, {"cliente": "WKVE Telecom", "nome_contato": "Rafael Cunha Gonçalves", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:22+00:00"}, {"cliente": "TEN SERVICOS DE TECNOLOGIA LTDA", "nome_contato": "Danilo", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:01:20+00:00"}, {"cliente": "ROLIM NET TECNOLOGIA LTDA - ME", "nome_contato": "Karol", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:01:16+00:00"}, {"cliente": "Destak - Telecom Serviços de comunicação e multimídia Eireli", "nome_contato": "Geovane Ferreira Falcão", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:00:56+00:00"}, {"cliente": "Tac Net Telecom Ltda", "nome_contato": "Sabrina Pepler Pacheco", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:00:54+00:00"}, {"cliente": "CENTURY NET", "nome_contato": "Ernandes Almeida", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:00:52+00:00"}, {"cliente": "Mr.Ynet Network Informática LTDA", "nome_contato": "Valéria", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:00:51+00:00"}, {"cliente": "Click Net soluções em internet", "nome_contato": "Gilberto Macêdo", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:00:49+00:00"}, {"cliente": "MONICA ANDRADE ALVES REHEM LTDA ( TOPNET)", "nome_contato": "Robson Rehem", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:00:48+00:00"}, {"cliente": "Rio network (A. N DE SOUZA RIOS NETWORK)", "nome_contato": "Álef Rios", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:00:46+00:00"}, {"cliente": "SECRELNET INFORMATICA - EIRELI", "nome_contato": "André Machado", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:00:45+00:00"}, {"cliente": "k2network (ITMINDS CONSULTORIA EM TECNOLOGIA DA INFORMACAO LTDA)", "nome_contato": "Cleyton Pereira", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:00:43+00:00"}, {"cliente": "FLEXFIBRA (FIRST TELECOM LTDA)", "nome_contato": "Tiago", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:00:42+00:00"}, {"cliente": "Ascon - FARIA & SCHIMITH LTDA - EPP", "nome_contato": "Jhorda", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:00:40+00:00"}, {"cliente": "CONECTV", "nome_contato": "Giovanna Lima", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:00:38+00:00"}, {"cliente": "Foxconect provedor de internet Ltda", "nome_contato": "Gregori Carniel", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:00:29+00:00"}, {"cliente": "COSMO TELECOM", "nome_contato": "Felipe", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:00:27+00:00"}, {"cliente": "Atualtek Telecom", "nome_contato": "Wesley Augusto Calandria", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:00:26+00:00"}, {"cliente": "Gmx Provedor de Internet Servicos e Locacoes LTDA", "nome_contato": "Cristóvão Rocha de Lima", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:00:25+00:00"}, {"cliente": "Starman Net Provedora de Internet LTDA", "nome_contato": "Felipe", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:00:23+00:00"}, {"cliente": "AMA SERVICOS MULTIMIDIA LTDA", "nome_contato": "CARLOS", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:00:22+00:00"}, {"cliente": "NETMANIA", "nome_contato": "WILSON SANTOS", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:00:21+00:00"}, {"cliente": "Mais Banda Larga Telecom", "nome_contato": "Cristian Kehl", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:00:19+00:00"}, {"cliente": "Newline Telecom", "nome_contato": "Alisson Emanuel Casimiro Morais", "csm": "Cristian Rodrigues", "data_envio": "2026-04-16T13:00:18+00:00"}, {"cliente": "INET", "nome_contato": "Hugo", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:00:17+00:00"}, {"cliente": "Norte Net", "nome_contato": "Rafael", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:00:15+00:00"}, {"cliente": "Infix telecom", "nome_contato": "Gabriella Ferreira", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:00:14+00:00"}, {"cliente": "EASY NET TELECOMUNICAÇÕES LTDA", "nome_contato": "Anderson Ricardo", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T13:00:13+00:00"}, {"cliente": "Megalink", "nome_contato": "Kevin Dourado", "csm": "Cristian Rodrigues", "data_envio": "2026-04-16T13:00:10+00:00"}, {"cliente": "Invista Net", "nome_contato": "João Marcelo", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:00:09+00:00"}, {"cliente": "VitorinoNet", "nome_contato": "Pedro Guilherme Lima Menezes", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:00:08+00:00"}, {"cliente": "HCNETI SVA (MARANET)", "nome_contato": "Maiany", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:00:06+00:00"}, {"cliente": "NETCOMET", "nome_contato": "Aliciana Maieski", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:00:05+00:00"}, {"cliente": "Asernet Telecom", "nome_contato": "João Paulo", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T13:00:03+00:00"}, {"cliente": "Worksat Telecom", "nome_contato": "Luis Henrique Voznika", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:00:01+00:00"}, {"cliente": "Playmais Fibra", "nome_contato": "harlen - +55 92 9117-5741", "csm": "Bianca Madeira", "data_envio": "2026-04-16T12:59:59+00:00"}, {"cliente": "FNT TELECOMUNICAÇÕES E ACESSO A REDES DE INTERNET LTDA", "nome_contato": "Francis Reais", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T12:59:57+00:00"}, {"cliente": "Cybernet Fibra", "nome_contato": "Karina", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T12:59:56+00:00"}, {"cliente": "CZNet", "nome_contato": "Cláudia", "csm": "Bianca Madeira", "data_envio": "2026-04-16T12:59:54+00:00"}, {"cliente": "EGR NET", "nome_contato": "GILVAN", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T12:59:53+00:00"}, {"cliente": "sigaon x - Servicos de Telecomunicacoes LTDA", "nome_contato": "Bianca Barbosa Pinto", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T12:59:52+00:00"}, {"cliente": "GBS - Tecnologia e Suporte", "nome_contato": "Gewerton Barreto dos Santos", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T12:59:50+00:00"}, {"cliente": "NEDEL TELECOM", "nome_contato": "Joni Eidt", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T12:59:49+00:00"}, {"cliente": "Netfi Serviços de Comunicações LTDA(NETFI)", "nome_contato": "Tállyta Parreira", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T12:59:48+00:00"}, {"cliente": "Voltec - Serviços de Automação Telecom Empreendimentos ltda", "nome_contato": "Michele", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T12:59:46+00:00"}, {"cliente": "INETTEC", "nome_contato": "Pollyana Ferreira", "csm": "Cristian Rodrigues", "data_envio": "2026-04-16T12:59:45+00:00"}, {"cliente": "Proxer Internet", "nome_contato": "Priscila Melo", "csm": "Cristian Rodrigues", "data_envio": "2026-04-16T12:59:44+00:00"}, {"cliente": "INTERA", "nome_contato": "Tairini Leal", "csm": "Cristian Rodrigues", "data_envio": "2026-04-16T12:59:43+00:00"}, {"cliente": "RV Connect LTDA", "nome_contato": "Dalziza Soares", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T12:59:41+00:00"}, {"cliente": "LG NET", "nome_contato": "Marcus Vinicius", "csm": "Cristian Rodrigues", "data_envio": "2026-04-16T12:59:40+00:00"}, {"cliente": "RG PROVIDER LTDA", "nome_contato": "Rogerio Ferreira dos Santos", "csm": "Cristian Rodrigues", "data_envio": "2026-04-16T12:59:39+00:00"}, {"cliente": "Carajásnet", "nome_contato": "Carlos André", "csm": "Cristian Rodrigues", "data_envio": "2026-04-16T12:59:38+00:00"}, {"cliente": "Viu Internet", "nome_contato": "Jaque Rubert", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T12:59:36+00:00"}, {"cliente": "Ubannet", "nome_contato": "Antenor", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T12:59:35+00:00"}, {"cliente": "ATI Internet - Agatangelo", "nome_contato": "Christian", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T12:59:33+00:00"}, {"cliente": "CLICKIP TECNOLOGIA LTDA", "nome_contato": "Maykon", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T12:59:32+00:00"}, {"cliente": "GLOBO FIBER TELECOM LTDA", "nome_contato": "Eliel", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T12:59:30+00:00"}, {"cliente": "Si Net", "nome_contato": "Robert", "csm": "Bianca Madeira", "data_envio": "2026-04-16T12:59:28+00:00"}, {"cliente": "STAR1 INTERNET - NMA SERVICOS DE TELECOMUNICACOES LTDA", "nome_contato": "Neto", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T12:59:27+00:00"}, {"cliente": "Plis Inteligencia em Tecnologia LTDA", "nome_contato": "Daniel Henrique da Silva Barbosa", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T12:59:25+00:00"}, {"cliente": "ISP MAIS TELECOM", "nome_contato": "DIONES SAMPAIO", "csm": "Bianca Madeira", "data_envio": "2026-04-16T12:59:24+00:00"}, {"cliente": "Vellon Telecom", "nome_contato": "Fernando Gomes", "csm": "Cristian Rodrigues", "data_envio": "2026-04-16T12:59:22+00:00"}, {"cliente": "Turbo BSB - Tecnologia Em Redes LTDA", "nome_contato": "Valéria Cardoso", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T12:59:21+00:00"}, {"cliente": "GIGAWEB TECNOLOGIA", "nome_contato": "Felipe Nunes", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T12:59:19+00:00"}, {"cliente": "RDFNET TELECOMUNICAÇÕES EIRELI - EPP", "nome_contato": "Hiran", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T12:59:18+00:00"}, {"cliente": "WEBNET PROVEDOR E INFORMATICA LTDA", "nome_contato": "Rodrigo Penteado", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T12:59:16+00:00"}, {"cliente": "JETZ - Alternativa Telecom LTDA", "nome_contato": "Marcos Lima", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T12:59:15+00:00"}, {"cliente": "Cst Servicos de Ti", "nome_contato": "Dionas", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T12:59:13+00:00"}, {"cliente": "Norte Line Telecomunicações Ltda Me", "nome_contato": "Débora Santos", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T12:59:11+00:00"}, {"cliente": "ZAAZ PROVEDOR DE INTERNET E TELECOMUNICAÇÃO", "nome_contato": "Silvestre Tadeu", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T12:59:10+00:00"}, {"cliente": "(Uninet) INFOR BARRA Provedor LTDA", "nome_contato": "Meure", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T12:59:09+00:00"}, {"cliente": "SERRA GERAL SOLUCOES PARA INTERNET LTDA", "nome_contato": "Henrique", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T12:59:07+00:00"}, {"cliente": "Seanet Telecom", "nome_contato": "Thiago Koch", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T12:59:06+00:00"}, {"cliente": "BRH - AS Informatica LTDA", "nome_contato": "Alexandre", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T12:59:04+00:00"}, {"cliente": "NET FLEX LTDA", "nome_contato": "Fernanda Alves", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T12:59:02+00:00"}, {"cliente": "Fronteira Internet (ANTONY P MARTINS EIRELI)", "nome_contato": "Zoilo Daniel", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T12:59:00+00:00"}, {"cliente": "G7NET", "nome_contato": "Gabriel", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T12:58:59+00:00"}, {"cliente": "VEXNET TELECOM", "nome_contato": "Tainá de Queiroz", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T12:58:57+00:00"}, {"cliente": "SIM INTERNET PROVEDORES DE INTERNET LTDA", "nome_contato": "JEISON", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T12:58:56+00:00"}, {"cliente": "Zap Tchê Telecom", "nome_contato": "Leandro", "csm": "Raquel Nascimento", "data_envio": "2026-04-16T12:58:54+00:00"}, {"cliente": "Net Jacareí Telecom Ltda", "nome_contato": "Fabio Francisco Guilhen", "csm": "Bianca Madeira", "data_envio": "2026-04-16T12:58:53+00:00"}, {"cliente": "PRONTO FIBRA LTDA", "nome_contato": "Marcelo Silva", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T12:58:51+00:00"}, {"cliente": "ESTRELAS TECNOLOGIA DA INFORMAÇÃO LTDA", "nome_contato": "Thiago", "csm": "Bianca Madeira", "data_envio": "2026-04-16T12:58:49+00:00"}, {"cliente": "Mgp (R V A TELECOM LTDA)", "nome_contato": "Diana Longo", "csm": "Bianca Madeira", "data_envio": "2026-04-16T12:58:48+00:00"}, {"cliente": "SPEED SERVICOS DE INTERNET LTDA (mmafibra)", "nome_contato": "Mauro Mello de Andrade", "csm": "Bianca Madeira", "data_envio": "2026-04-16T12:58:46+00:00"}, {"cliente": "DBNet com VC (Debian Signal Comunicação Multimidia Eireli LTDA)", "nome_contato": "Linda Costa", "csm": "Bianca Madeira", "data_envio": "2026-04-16T12:58:44+00:00"}, {"cliente": "Provale TI", "nome_contato": "Jéssica", "csm": "Cristian Rodrigues", "data_envio": "2026-04-16T12:58:42+00:00"}, {"cliente": "BRSULNET", "nome_contato": "Marlon Trevisan", "csm": "Bianca Madeira", "data_envio": "2026-04-16T12:58:41+00:00"}, {"cliente": "Oquei Telecom LTDA", "nome_contato": "André", "csm": "Gabrielle Marques", "data_envio": "2026-04-16T12:58:39+00:00"}, {"cliente": "Red Paraguaya de Telecomunicaciones SA (Neo Telecom)", "nome_contato": "Bruno", "csm": "Bianca Madeira", "data_envio": "2026-04-16T12:58:37+00:00"}, {"cliente": "LC VIRTUAL NET", "nome_contato": "Nelson", "csm": "Nadson Pinheiro", "data_envio": "2026-04-10T14:03:16+00:00"}, {"cliente": "Pronet telecom", "nome_contato": "Daniella Cesar de Sousa", "csm": "Bianca Madeira", "data_envio": "2026-04-10T14:03:14+00:00"}, {"cliente": "NET BAIO", "nome_contato": "GILMAR JOSE DA SILVA", "csm": "Bianca Madeira", "data_envio": "2026-04-10T14:03:13+00:00"}, {"cliente": "Netfibra (LS Conect Telecom)", "nome_contato": "Jane", "csm": "Bianca Madeira", "data_envio": "2026-04-10T14:03:12+00:00"}, {"cliente": "GLOBALNETRS", "nome_contato": "roberto", "csm": "Cristian Rodrigues", "data_envio": "2026-04-10T14:03:11+00:00"}, {"cliente": "SOLUTIONS TELECOM", "nome_contato": "Gardel", "csm": "Gabrielle Marques", "data_envio": "2026-04-10T14:03:10+00:00"}, {"cliente": "Click.com", "nome_contato": "Izabel", "csm": "Bianca Madeira", "data_envio": "2026-04-10T14:03:09+00:00"}, {"cliente": "MR NET TELECOMUNICACAO LTDA ( MR NET PARÁ)", "nome_contato": "Victor Williames Pantoja Costa", "csm": "Nadson Pinheiro", "data_envio": "2026-04-10T14:03:07+00:00"}, {"cliente": "VGPNET", "nome_contato": "karina", "csm": "Cristian Rodrigues", "data_envio": "2026-04-10T14:03:06+00:00"}, {"cliente": "Diginet Telecom - A T Magalhaes", "nome_contato": "Adam", "csm": "Nadson Pinheiro", "data_envio": "2026-04-10T14:03:05+00:00"}, {"cliente": "Pantanal - Brito & Gonçalves LTDA ME", "nome_contato": "Henrique da Silva Brito", "csm": "Gabrielle Marques", "data_envio": "2026-04-10T14:03:04+00:00"}, {"cliente": "Clicknet", "nome_contato": "Patrícia Freitas", "csm": "Gabrielle Marques", "data_envio": "2026-04-10T14:03:02+00:00"}, {"cliente": "SuperIP Telecomunicaçoes LTDA", "nome_contato": "Michael Stein", "csm": "Gabrielle Marques", "data_envio": "2026-04-10T14:03:01+00:00"}, {"cliente": "OPCAOTELECOM TELECOMUNICACOES S/A", "nome_contato": "Marcelo", "csm": "Cristian Rodrigues", "data_envio": "2026-04-10T14:03:00+00:00"}, {"cliente": "Ciabrasnet", "nome_contato": "Glacieli", "csm": "Cristian Rodrigues", "data_envio": "2026-04-10T14:02:58+00:00"}, {"cliente": "VELLO", "nome_contato": "Danilo", "csm": "Gabrielle Marques", "data_envio": "2026-04-10T14:02:57+00:00"}, {"cliente": "TEUTONET", "nome_contato": "Agnes Santos", "csm": "Bianca Madeira", "data_envio": "2026-04-10T14:02:55+00:00"}, {"cliente": "ORBE TELECOM - COMERCIO SERVICOS EM TELECOMUNICACOES", "nome_contato": "Cleiton Júnior", "csm": "Gabrielle Marques", "data_envio": "2026-04-10T14:02:54+00:00"}, {"cliente": "CPW Internet", "nome_contato": "Vanderleia DeAmbrosio", "csm": "Cristian Rodrigues", "data_envio": "2026-04-10T14:02:52+00:00"}, {"cliente": "UNI SERVIÇOS DE TECNOLOGIA DA INFORMAÇÃO LTDA", "nome_contato": "Renaldo", "csm": "Gabrielle Marques", "data_envio": "2026-04-10T14:02:51+00:00"}, {"cliente": "AONET (LEGNA SERVICOS DE TELECOMUNICAÇÕES LTDA)", "nome_contato": "Helena", "csm": "Cristian Rodrigues", "data_envio": "2026-04-10T14:02:48+00:00"}, {"cliente": "NAVIX SOLUÇÕES EM INTERNET", "nome_contato": "Samuel", "csm": "Nadson Pinheiro", "data_envio": "2026-03-24T15:59:26+00:00"}, {"cliente": "BRENDON C B DE CASTRO", "nome_contato": "BRENDON", "csm": "Nadson Pinheiro", "data_envio": "2026-03-24T15:59:25+00:00"}, {"cliente": "INET", "nome_contato": "Hugo", "csm": "Nadson Pinheiro", "data_envio": "2026-03-24T15:59:24+00:00"}, {"cliente": "I7 Provedor de internet LTDA", "nome_contato": "Laerte", "csm": "Nadson Pinheiro", "data_envio": "2026-03-24T15:59:23+00:00"}, {"cliente": "LOGO TELECOM", "nome_contato": "Michell", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:59:22+00:00"}, {"cliente": "Futuranet", "nome_contato": "Jonas", "csm": "Sem CSM", "data_envio": "2026-03-24T15:59:21+00:00"}, {"cliente": "Netwest", "nome_contato": "Everton Cardoso Mendes", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:59:20+00:00"}, {"cliente": "Greenet", "nome_contato": "Patric", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:59:18+00:00"}, {"cliente": "NS Internet LTDA", "nome_contato": "Kerlei", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:59:17+00:00"}, {"cliente": "ULTRANET", "nome_contato": "Edilson Maier Campos", "csm": "Sem CSM", "data_envio": "2026-03-24T15:59:15+00:00"}, {"cliente": "JECTIX TELECOMUNICAÇÕES E SERVIÇOS", "nome_contato": "Jefferson Roger", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:58:45+00:00"}, {"cliente": "Wit Telecom", "nome_contato": "ricardo - +55 93 9203-9153", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:58:44+00:00"}, {"cliente": "MEGANET TELECOM", "nome_contato": "DIONE", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:58:43+00:00"}, {"cliente": "BMI SERVICOS DIGITAIS", "nome_contato": "Rênea Prado", "csm": "Nadson Pinheiro", "data_envio": "2026-03-24T15:58:42+00:00"}, {"cliente": "Interserv Telecom LTDA", "nome_contato": "ILMA MICHELE COSTA VASCONCELOS SOARES", "csm": "Gabrielle S. Marques", "data_envio": "2026-03-24T15:58:41+00:00"}, {"cliente": "Zen Internet e Telecomunicação LTDA", "nome_contato": "Ingrid", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:58:39+00:00"}, {"cliente": "PRIME TELECOM LTDA", "nome_contato": "Vanderlam Silva Carvalho", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:58:38+00:00"}, {"cliente": "TK TELECOM", "nome_contato": "TIAGO DE JESUS SANTOS", "csm": "Gabrielle S. Marques", "data_envio": "2026-03-24T15:58:37+00:00"}, {"cliente": "SEABANT", "nome_contato": "ERALDO CARLOS DA SILVA", "csm": "Sem CSM", "data_envio": "2026-03-24T15:58:35+00:00"}, {"cliente": "ULTRANET (ultranetpa)", "nome_contato": "Edilson Maier Campos", "csm": "Sem CSM", "data_envio": "2026-03-24T15:58:32+00:00"}, {"cliente": "Apex Telecom (CINEIA BEATRIZ DE OLIVEIRA MIRANDA)", "nome_contato": "HERÁCLITO DANTAS DE MIRANDA NETO", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:58:03+00:00"}, {"cliente": "NETIAN telecom", "nome_contato": "Sebastião augusto Rodrigues de Mesquita", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:57:59+00:00"}, {"cliente": "ZeusNet", "nome_contato": "Marcílio", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:57:57+00:00"}, {"cliente": "Galiza NET", "nome_contato": "Erick Rodrigues Mascarenhas", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:57:55+00:00"}, {"cliente": "PIXEL INTERNET E TELECOMUNICAÇÕES EIRELI", "nome_contato": "Thais", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:57:54+00:00"}, {"cliente": "Branet - BRASIL ANTENAS abdossantos", "nome_contato": "ALCIDES", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:57:53+00:00"}, {"cliente": "DDL LINE", "nome_contato": "denes", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:57:52+00:00"}, {"cliente": "Catupi.com", "nome_contato": "Patricia Aschebrock Laux", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:57:51+00:00"}, {"cliente": "Ozmaps", "nome_contato": "Gina", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:57:50+00:00"}, {"cliente": "Web Serviços de Comunicação multimídia Ltda Netcanes", "nome_contato": "Jabes", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:57:49+00:00"}, {"cliente": "LIKE TELECOM LTDA - ME (LIKE TELECOM)", "nome_contato": "Victor", "csm": "Sem CSM", "data_envio": "2026-03-24T15:57:47+00:00"}, {"cliente": "Futuranet", "nome_contato": "Jonas", "csm": "Sem CSM", "data_envio": "2026-03-24T15:57:46+00:00"}, {"cliente": "Esfera Condominio LTDA", "nome_contato": "alex", "csm": "Nadson Pinheiro", "data_envio": "2026-03-24T15:57:45+00:00"}, {"cliente": "NetHouse Telecom", "nome_contato": "mairla", "csm": "Sem CSM", "data_envio": "2026-03-24T15:57:44+00:00"}, {"cliente": "Geração Net", "nome_contato": "Denise", "csm": "Raquel Nascimento", "data_envio": "2026-03-24T15:57:12+00:00"}, {"cliente": "FiberComp", "nome_contato": "Karine", "csm": "Raquel Nascimento", "data_envio": "2026-03-24T15:57:09+00:00"}, {"cliente": "FIVE TELECOM LTDA", "nome_contato": "Marcelo", "csm": "Raquel Nascimento", "data_envio": "2026-03-24T15:57:08+00:00"}, {"cliente": "TRES PONTAS TECNOLOGIA", "nome_contato": "Andressa", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:57:05+00:00"}, {"cliente": "FibraOn Soluções", "nome_contato": "Keli Miranda", "csm": "Sem CSM", "data_envio": "2026-03-24T15:57:03+00:00"}, {"cliente": "GA Service Internet", "nome_contato": "ilaildo Silva", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:57:02+00:00"}, {"cliente": "Mais Provedor Serviços de Internet Ltda", "nome_contato": "Tati", "csm": "Raquel Nascimento", "data_envio": "2026-03-24T15:56:55+00:00"}, {"cliente": "Greenet", "nome_contato": "Patric", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:56:53+00:00"}, {"cliente": "TI CONNECT", "nome_contato": "Janaina", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:56:52+00:00"}, {"cliente": "MKS CONNECT", "nome_contato": "Daniel Velame", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:56:51+00:00"}, {"cliente": "AREA 51", "nome_contato": "Patrick", "csm": "Sem CSM", "data_envio": "2026-03-24T15:56:48+00:00"}, {"cliente": "Zum Telecom", "nome_contato": "James", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:56:47+00:00"}, {"cliente": "NAVIX SOLUÇÕES EM INTERNET", "nome_contato": "Samuel", "csm": "Nadson Pinheiro", "data_envio": "2026-03-24T15:56:45+00:00"}, {"cliente": "Portal Eletrônico Ltda", "nome_contato": "katia", "csm": "Sem CSM", "data_envio": "2026-03-24T15:56:44+00:00"}, {"cliente": "LOGO TELECOM", "nome_contato": "Michell", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:56:43+00:00"}, {"cliente": "Conexiones Rápidas", "nome_contato": "Ervin Elueterio Pérez Siles", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:56:42+00:00"}, {"cliente": "GLC SERVIÇO & COMÉRCIO DE INFORMÁTICA LTDA ME", "nome_contato": "Caio Galvão", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:56:41+00:00"}, {"cliente": "Evottel", "nome_contato": "Caroline Perotto", "csm": "Gabrielle S. Marques", "data_envio": "2026-03-24T15:56:39+00:00"}, {"cliente": "Blix", "nome_contato": "Josimar", "csm": "Gabrielle S. Marques", "data_envio": "2026-03-24T15:56:36+00:00"}, {"cliente": "GLOBALNETRS", "nome_contato": "roberto", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:56:35+00:00"}, {"cliente": "High Speed", "nome_contato": "Luis Paulo", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:56:34+00:00"}, {"cliente": "connecte PE", "nome_contato": "mario", "csm": "Nadson Pinheiro", "data_envio": "2026-03-24T15:56:32+00:00"}, {"cliente": "SOLUTIONS TELECOM", "nome_contato": "Gardel", "csm": "Gabrielle S. Marques", "data_envio": "2026-03-24T15:56:31+00:00"}, {"cliente": "Interserv Telecom LTDA", "nome_contato": "ILMA MICHELE COSTA VASCONCELOS SOARES", "csm": "Sem CSM", "data_envio": "2026-03-24T15:56:30+00:00"}, {"cliente": "TBT TELECOM", "nome_contato": "Júnior Monteiro", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:56:28+00:00"}, {"cliente": "rede global", "nome_contato": "LINCOMFÁ ANDRADE FONTES", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:56:27+00:00"}, {"cliente": "INFOTEC", "nome_contato": "DIOGO PAZETTO", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:56:26+00:00"}, {"cliente": "VIPERNET", "nome_contato": "alana", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:56:23+00:00"}, {"cliente": "MR NET (Pará)", "nome_contato": "Victor Williames Pantoja Costa", "csm": "Nadson Pinheiro", "data_envio": "2026-03-24T15:56:22+00:00"}, {"cliente": "enet provedor", "nome_contato": "eder", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:56:19+00:00"}, {"cliente": "Nossa Net Telecom (GRUPO ALMEIDA & REIS LTDA)", "nome_contato": "Gleyziane", "csm": "Raquel Nascimento", "data_envio": "2026-03-24T15:56:18+00:00"}, {"cliente": "INFOTECHY INTERNET VIA FIBRA", "nome_contato": "DEBORA FELTZ PEREIRA RAYCIK", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:56:17+00:00"}, {"cliente": "rapeedo telecom", "nome_contato": "jhonne - +55 33 8405-9026", "csm": "Nadson Pinheiro", "data_envio": "2026-03-24T15:56:16+00:00"}, {"cliente": "MEGANET TELECOM", "nome_contato": "DIONE", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:56:13+00:00"}, {"cliente": "R3 Internet Ltda", "nome_contato": "Raphael Mazzolini", "csm": "Sem CSM", "data_envio": "2026-03-24T15:56:12+00:00"}, {"cliente": "Zen Internet e Telecomunicação LTDA", "nome_contato": "Ingrid", "csm": "Sem CSM", "data_envio": "2026-03-24T15:56:10+00:00"}, {"cliente": "Wit Telecom", "nome_contato": "ricardo - +55 93 9203-9153", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:56:09+00:00"}, {"cliente": "g10 telecom", "nome_contato": "Adriana", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:56:08+00:00"}, {"cliente": "AKI NET", "nome_contato": "Betânia", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:56:04+00:00"}, {"cliente": "Fly internet sorriso", "nome_contato": "Adilson - +55 66 9668-8530", "csm": "Nadson Pinheiro", "data_envio": "2026-03-24T15:56:02+00:00"}, {"cliente": "LM Telecom Ltda", "nome_contato": "Ingrid", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:56:00+00:00"}, {"cliente": "STA TELECOM - IT SERVICE AND COMMUNICATIONS", "nome_contato": "Matheus", "csm": "Sem CSM", "data_envio": "2026-03-24T15:55:59+00:00"}, {"cliente": "TRUETEC", "nome_contato": "Rubens Urquisa", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:55:58+00:00"}, {"cliente": "NETFSA", "nome_contato": "Moanna", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:55:56+00:00"}, {"cliente": "VGPNET", "nome_contato": "karina", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:55:55+00:00"}, {"cliente": "FG TELECOM/ ConectBA", "nome_contato": "Tainara Almeida", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:55:54+00:00"}, {"cliente": "FTNET.GRAFICOS", "nome_contato": "Luis França", "csm": "Gabrielle S. Marques", "data_envio": "2026-03-24T15:55:22+00:00"}, {"cliente": "Trevo Internet", "nome_contato": "WERLY MONTEIRO", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:55:20+00:00"}, {"cliente": "Sirius Place - Sirius Assessoria e Consultoria Ltda", "nome_contato": "Matheus Almeida", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:55:19+00:00"}, {"cliente": "DIGIPLAN NET", "nome_contato": "PAULO C.", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:55:16+00:00"}, {"cliente": "In9ve", "nome_contato": "Luara Oliveira", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:55:15+00:00"}, {"cliente": "RIZZINET", "nome_contato": "Sidnei Rizzi Brasil", "csm": "Sem CSM", "data_envio": "2026-03-24T15:55:14+00:00"}, {"cliente": "Simples Internet (P A THOMAZ MARCELINO E CIA LTDA EPP)", "nome_contato": "PAULO ADRIANO THOMAZ MARCELINO", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:55:12+00:00"}, {"cliente": "FLASH NET BRASIL", "nome_contato": "Lucas Albuquerque", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:55:11+00:00"}, {"cliente": "SAMISSA TELECOM", "nome_contato": "Wesley Barbaresco", "csm": "Sem CSM", "data_envio": "2026-03-24T15:55:10+00:00"}, {"cliente": "SUPERTEC TELECOM", "nome_contato": "Saulo Miranda", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:55:09+00:00"}, {"cliente": "BJ NET PROVEDOR DE INTERNET LTDA", "nome_contato": "Hellyfer Alberti", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:55:03+00:00"}, {"cliente": "Atel Telecom do Brasil Ltda.", "nome_contato": "Pedro Rh", "csm": "Raquel Nascimento", "data_envio": "2026-03-24T15:55:02+00:00"}, {"cliente": "POWERNET SOLUTIONS", "nome_contato": "Marlon", "csm": "Raquel Nascimento", "data_envio": "2026-03-24T15:55:00+00:00"}, {"cliente": "FIBERNET EMPRESA DE COMUNICAÇÕES LTDA", "nome_contato": "Darcy", "csm": "Raquel Nascimento", "data_envio": "2026-03-24T15:54:58+00:00"}, {"cliente": "Razaoinfo", "nome_contato": "Zito Loss", "csm": "Raquel Nascimento", "data_envio": "2026-03-24T15:54:57+00:00"}, {"cliente": "Ibiunet Telecomunicacoes Ltda", "nome_contato": "Mikael", "csm": "Raquel Nascimento", "data_envio": "2026-03-24T15:54:56+00:00"}, {"cliente": "ROBERTA ROSSATTO FRANSCICO ME MEDIEVAL TECH", "nome_contato": "Eder", "csm": "Raquel Nascimento", "data_envio": "2026-03-24T15:54:54+00:00"}, {"cliente": "SS TECNOLOGIA LTDA (NOVALINK )", "nome_contato": "Luiz Guilherme Souza", "csm": "Raquel Nascimento", "data_envio": "2026-03-24T15:54:53+00:00"}, {"cliente": "ORACLON TELECOM", "nome_contato": "Jair Antônio", "csm": "Raquel Nascimento", "data_envio": "2026-03-24T15:54:52+00:00"}, {"cliente": "Cyber Internet", "nome_contato": "Ketlyn", "csm": "Raquel Nascimento", "data_envio": "2026-03-24T15:54:50+00:00"}, {"cliente": "Neolog Telecom", "nome_contato": "Ribamar Barros", "csm": "Raquel Nascimento", "data_envio": "2026-03-24T15:54:49+00:00"}, {"cliente": "SUPRINET", "nome_contato": "Fabiano", "csm": "Raquel Nascimento", "data_envio": "2026-03-24T15:54:48+00:00"}, {"cliente": "Clean Net Telecomunicações Ltda", "nome_contato": "Núbia - RH Clean Net", "csm": "Sem CSM", "data_envio": "2026-03-24T15:54:46+00:00"}, {"cliente": "I7 Provedor de internet LTDA", "nome_contato": "Laerte", "csm": "Sem CSM", "data_envio": "2026-03-24T15:54:45+00:00"}, {"cliente": "INFO TELECCOM INTERNET - LCA Telecom", "nome_contato": "Cristiano Almeida", "csm": "Raquel Nascimento", "data_envio": "2026-03-24T15:54:43+00:00"}, {"cliente": "Sim Goiás (SIMCLASS)", "nome_contato": "FELLIPE PAULINO", "csm": "Sem CSM", "data_envio": "2026-03-24T15:54:42+00:00"}, {"cliente": "ROX Telecom", "nome_contato": "Sandra Regina Viana da Silva", "csm": "Raquel Nascimento", "data_envio": "2026-03-24T15:54:40+00:00"}, {"cliente": "FIXTELL TELECOM NE LTDA", "nome_contato": "Bruno", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:54:39+00:00"}, {"cliente": "Planície Net Telecom Ltda.", "nome_contato": "Junior", "csm": "Sem CSM", "data_envio": "2026-03-24T15:54:37+00:00"}, {"cliente": "AGT NET", "nome_contato": "Juliana", "csm": "Sem CSM", "data_envio": "2026-03-24T15:54:36+00:00"}, {"cliente": "RGSul Internet Eireli", "nome_contato": "Roger", "csm": "Sem CSM", "data_envio": "2026-03-24T15:54:34+00:00"}, {"cliente": "nextall", "nome_contato": "Gabriel", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:54:33+00:00"}, {"cliente": "Conect Soluction", "nome_contato": "Josy Garcez", "csm": "Gabrielle S. Marques", "data_envio": "2026-03-24T15:54:32+00:00"}, {"cliente": "GRUPO VELEZ VELEZ", "nome_contato": "Eleanner Jose Cedeno Carvajal", "csm": "Bianca Madeira", "data_envio": "2026-03-24T15:54:30+00:00"}, {"cliente": "UAUBR", "nome_contato": "orlando", "csm": "Sem CSM", "data_envio": "2026-03-24T15:54:27+00:00"}, {"cliente": "OPÇÃO NET", "nome_contato": "Rafael Roveri", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T15:54:23+00:00"}, {"cliente": "Grupo Net (Net São José)", "nome_contato": "Filipe Ferreira", "csm": "Sem CSM", "data_envio": "2026-03-24T15:54:20+00:00"}, {"cliente": "JTEL", "nome_contato": "Karine", "csm": "Sem CSM", "data_envio": "2026-03-24T15:54:15+00:00"}, {"cliente": "Yukaline Telecomunicações", "nome_contato": "Erica", "csm": "Sem CSM", "data_envio": "2026-03-24T15:54:14+00:00"}, {"cliente": "Interligados Weblink", "nome_contato": "Larissa De Oliveira", "csm": "Sem CSM", "data_envio": "2026-03-24T15:54:11+00:00"}, {"cliente": "LINK SPEED", "nome_contato": "Jaime", "csm": "Bianca Madeira", "data_envio": "2026-03-24T14:54:08+00:00"}, {"cliente": "NEONET", "nome_contato": "Maria Silene", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:54:07+00:00"}, {"cliente": "PERFECT CONECTION", "nome_contato": "Thiago", "csm": "Bianca Madeira", "data_envio": "2026-03-24T14:54:05+00:00"}, {"cliente": "conecta digital", "nome_contato": "Bruno", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:54:04+00:00"}, {"cliente": "LIDER INTERNET", "nome_contato": "Dailton", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:54:01+00:00"}, {"cliente": "criativa internet", "nome_contato": "Fabiana - 98 985921155", "csm": "Nadson Pinheiro", "data_envio": "2026-03-24T14:53:59+00:00"}, {"cliente": "Panda Network", "nome_contato": "Alan.DoM (SAIU DO PROVEDOR)", "csm": "Sem CSM", "data_envio": "2026-03-24T14:53:57+00:00"}, {"cliente": "Contato Internet Ltda", "nome_contato": "Diogo", "csm": "Sem CSM", "data_envio": "2026-03-24T14:53:55+00:00"}, {"cliente": "giga net", "nome_contato": "Edson Valtacir Schenckel", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:53:54+00:00"}, {"cliente": "IFIBRA TELECOM LTDA", "nome_contato": "Jonathan", "csm": "Sem CSM", "data_envio": "2026-03-24T14:53:53+00:00"}, {"cliente": "Digital Telecom SP", "nome_contato": "Paulo", "csm": "Sem CSM", "data_envio": "2026-03-24T14:53:52+00:00"}, {"cliente": "BRASIL DIGITAL TELECOM", "nome_contato": "Cezar", "csm": "Bianca Madeira", "data_envio": "2026-03-24T14:53:50+00:00"}, {"cliente": "Sim.Digital - (Corumbá)", "nome_contato": "LUIZ ARAUJO", "csm": "Sem CSM", "data_envio": "2026-03-24T14:53:49+00:00"}, {"cliente": "MEGALINK VILA VELHA", "nome_contato": "Décio Junior", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:53:48+00:00"}, {"cliente": "Mais Internet LTDA Unimas (MAIS TECH SOLUCOES EM TI LTDA)", "nome_contato": "Bruna", "csm": "Bianca Madeira", "data_envio": "2026-03-24T14:53:45+00:00"}, {"cliente": "Siqueira Telecomunicações Eireli", "nome_contato": "Elmo", "csm": "Sem CSM", "data_envio": "2026-03-24T14:53:44+00:00"}, {"cliente": "Grupo: G6 (NORTE LINK FIBRA)", "nome_contato": "Italo Rodrigues Garcia", "csm": "Sem CSM", "data_envio": "2026-03-24T14:53:42+00:00"}, {"cliente": "Conteúdo Digitais 5.8", "nome_contato": "Valteir Sutil", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:53:40+00:00"}, {"cliente": "NET COMPANY", "nome_contato": "Gilmar", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:53:38+00:00"}, {"cliente": "Grafnet LTDA", "nome_contato": "Adriano Rocha", "csm": "Sem CSM", "data_envio": "2026-03-24T14:53:36+00:00"}, {"cliente": "ALLREDE TELECOM", "nome_contato": "Luana", "csm": "Sem CSM", "data_envio": "2026-03-24T14:53:35+00:00"}, {"cliente": "Sua Internet Ltda (D-kiros)", "nome_contato": "Mara", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:53:34+00:00"}, {"cliente": "Microrcim Pronet Do Brasil Informática LTDA", "nome_contato": "Júnior Oliveira", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:53:32+00:00"}, {"cliente": "Resolutto", "nome_contato": "Ruan Resolutto", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:53:31+00:00"}, {"cliente": "NG Telecom", "nome_contato": "Douglas Anastácio", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:53:30+00:00"}, {"cliente": "MUNDO VIRTUAL INFORMÁTICA (SIDINEI MARQUES VIEIRA) MVNET", "nome_contato": "Rene", "csm": "Sem CSM", "data_envio": "2026-03-24T14:53:29+00:00"}, {"cliente": "Techy Internet", "nome_contato": "Rogério dos Santos", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:53:27+00:00"}, {"cliente": "NET ONZE/ Net11", "nome_contato": "Pablo Calza", "csm": "Sem CSM", "data_envio": "2026-03-24T14:53:26+00:00"}, {"cliente": "CONEXAO LINK INTERNET BANDA LARGA", "nome_contato": "Rodrigo Gomes", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:53:25+00:00"}, {"cliente": "Nicnet Telecom Ltda", "nome_contato": "Ricardo Ribeiro", "csm": "Sem CSM", "data_envio": "2026-03-24T14:53:23+00:00"}, {"cliente": "Alternativa Provedor", "nome_contato": "Isaque Oliveira de Santana", "csm": "Sem CSM", "data_envio": "2026-03-24T14:53:22+00:00"}, {"cliente": "P4 Telecom", "nome_contato": "Júnior Dalla", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:53:18+00:00"}, {"cliente": "ULTRANET TELECOM", "nome_contato": "Dyego", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:53:17+00:00"}, {"cliente": "7link Internet", "nome_contato": "Emerson Silva de Oliveira", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:53:15+00:00"}, {"cliente": "WEBI FIBRA", "nome_contato": "Wagner", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:53:14+00:00"}, {"cliente": "NS Internet LTDA", "nome_contato": "Kerlei", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:53:13+00:00"}, {"cliente": "GD NET SOLUTION", "nome_contato": "Arthur Gomes", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:53:11+00:00"}, {"cliente": "Net Facil ISP Telecom", "nome_contato": "Janesley", "csm": "Raquel Nascimento", "data_envio": "2026-03-24T14:53:09+00:00"}, {"cliente": "SEBRATEL TECNOLOGIA LTDA", "nome_contato": "Cássio Silva", "csm": "Bianca Madeira", "data_envio": "2026-03-24T14:53:07+00:00"}, {"cliente": "Città Telecom", "nome_contato": "Paulo Junior", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:53:06+00:00"}, {"cliente": "GHNET INTERNET", "nome_contato": "Wanderson", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:53:05+00:00"}, {"cliente": "Multiplic Comunicação e tecnologia LTDA", "nome_contato": "Kathelyn", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:53:03+00:00"}, {"cliente": "ONNET TELECOMUNICACOES LTDA", "nome_contato": "Welington Borges", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:53:02+00:00"}, {"cliente": "Gnex Telecom", "nome_contato": "Júnior", "csm": "Bianca Madeira", "data_envio": "2026-03-24T14:53:00+00:00"}, {"cliente": "SPEEDNET INFORMÁTICA LTDA ME", "nome_contato": "Paulo Henrique Dos santos", "csm": "Bianca Madeira", "data_envio": "2026-03-24T14:52:59+00:00"}, {"cliente": "Sartor internet LTDA", "nome_contato": "Cristhiano de Bona sartor", "csm": "Sem CSM", "data_envio": "2026-03-24T14:52:58+00:00"}, {"cliente": "Fibralink - IR TECNOLOGIA LTDA", "nome_contato": "Elane", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:52:56+00:00"}, {"cliente": "CentralNet", "nome_contato": "Leonardo", "csm": "Sem CSM", "data_envio": "2026-03-24T14:52:55+00:00"}, {"cliente": "RBT TELECOM LTDA", "nome_contato": "Wilson Ritt Igleisas", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:52:54+00:00"}, {"cliente": "RAP10 INTERNET LTDA", "nome_contato": "Raphael Ricardo", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:52:53+00:00"}, {"cliente": "Tapi Fibra - Conekta Telecom Ltda", "nome_contato": "Piter", "csm": "Sem CSM", "data_envio": "2026-03-24T14:52:51+00:00"}, {"cliente": "Forza Telecomunicacoes", "nome_contato": "MARCOS", "csm": "Bianca Madeira", "data_envio": "2026-03-24T14:52:50+00:00"}, {"cliente": "REDE SHOPPING TELECOM", "nome_contato": "Patricia", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:52:49+00:00"}, {"cliente": "DELTA CONNEX TELECOM", "nome_contato": "Victor", "csm": "Bianca Madeira", "data_envio": "2026-03-24T14:52:47+00:00"}, {"cliente": "TCHETURBO INTERNET PROVIDER", "nome_contato": "Leidiane Bandeira", "csm": "Sem CSM", "data_envio": "2026-03-24T14:52:46+00:00"}, {"cliente": "NIPPONTEC TELECOMUNICACOES (RAPIDIN INTERNET)", "nome_contato": "Samuel", "csm": "Nadson Pinheiro", "data_envio": "2026-03-24T14:52:44+00:00"}, {"cliente": "NET PRIME (PRIME SYSTEM TELECOM)", "nome_contato": "Raider", "csm": "Bianca Madeira", "data_envio": "2026-03-24T14:52:43+00:00"}, {"cliente": "N-Multimidia Telecomunicações LTDA", "nome_contato": "Marcos", "csm": "Bianca Madeira", "data_envio": "2026-03-24T14:52:42+00:00"}, {"cliente": "Globall Telecom", "nome_contato": "Guilherme Daros", "csm": "Bianca Madeira", "data_envio": "2026-03-24T14:52:38+00:00"}, {"cliente": "MHNET", "nome_contato": "Caroline", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:52:35+00:00"}, {"cliente": "ZapISP", "nome_contato": "Cecília Alves", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:52:33+00:00"}, {"cliente": "NET WAY INFORMATICA", "nome_contato": "Karla Keller", "csm": "Sem CSM", "data_envio": "2026-03-24T14:52:32+00:00"}, {"cliente": "VELONET", "nome_contato": "Maria Fernanda", "csm": "Bianca Madeira", "data_envio": "2026-03-24T14:52:31+00:00"}, {"cliente": "Stalker (Innon)", "nome_contato": "Felipe Brunoro", "csm": "Cristian Rodrigues", "data_envio": "2026-03-24T14:52:29+00:00"}, {"cliente": "ETECC FIBRA OPTICA", "nome_contato": "Igor Marques Pinto", "csm": "Sem CSM", "data_envio": "2026-03-24T14:52:28+00:00"}, {"cliente": "THE FIBER PROVEDORA", "nome_contato": "Euder Filho", "csm": "Gabrielle S. Marques", "data_envio": "2026-03-24T14:52:26+00:00"}, {"cliente": "SIM DIGITAL", "nome_contato": "Tiago", "csm": "Bianca Madeira", "data_envio": "2026-03-24T14:52:24+00:00"}], "responseRecords": [{"id_card": "1094118805.0", "cliente": "VIVA TELECOMUNICACOES & PROVEDOR DE INTERNET LTDA", "nome_contato": "Joedson (Joo)", "csm": "Gabrielle Marques", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "Muito bom", "data_resposta": "2026-04-16T17:19:32+00:00"}, {"id_card": "805125350.0", "cliente": "SECRELNET INFORMATICA - EIRELI", "nome_contato": "André Machado", "csm": "Raquel Nascimento", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": ".", "data_resposta": "2026-04-16T14:22:49+00:00"}, {"id_card": "633324987.0", "cliente": "NAVEGMAIS", "nome_contato": "Franciano", "csm": "Gabrielle Marques", "nota_numerica": 9, "classificacao_nps": "Promotor", "mensagem_melhoria": "Até o momento está sendo uma boa experiência", "data_resposta": "2026-04-16T14:08:20+00:00"}, {"id_card": "1002263186.0", "cliente": "ZAVAZ JANAUBA", "nome_contato": "Matheus Felipe", "csm": "Cristian Rodrigues", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "Estou bem satisfeito com a maneira que é hoje.", "data_resposta": "2026-04-16T13:55:25+00:00"}, {"id_card": "638237708.0", "cliente": "Mais Banda Larga Telecom", "nome_contato": "Cristian Kehl", "csm": "Nadson Pinheiro", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "Muito bom", "data_resposta": "2026-04-16T13:24:08+00:00"}, {"id_card": "1147411202.0", "cliente": "Unetvale", "nome_contato": "Raquel Iastrenski Veneri", "csm": "Gabrielle Marques", "nota_numerica": 9, "classificacao_nps": "Promotor", "mensagem_melhoria": ".", "data_resposta": "2026-04-16T13:15:44+00:00"}, {"id_card": "1295379516.0", "cliente": "FR TELECOM", "nome_contato": "Fernando", "csm": "Gabrielle Marques", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "Como estou usando agora nao sei dizer ruso esta otimo.", "data_resposta": "2026-04-16T13:07:34+00:00"}, {"id_card": "652235009.0", "cliente": "TURBONETT TELECOM", "nome_contato": "Brunno Lima Magalhaes", "csm": "Raquel Nascimento", "nota_numerica": 8, "classificacao_nps": "Neutro", "mensagem_melhoria": "Nao quero responder", "data_resposta": "2026-04-16T13:04:57+00:00"}, {"id_card": "1017235952.0", "cliente": "Proxer Internet", "nome_contato": "Priscila Melo", "csm": "Cristian Rodrigues", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "O que acho que poderiam melhorar para mim já foi realizado, que era ter uum módulo focado em liderança, assim nós do RH conseguimos impactar primeiro os líderes entenderem o seu papel, para depois os demais terem esta vontade de buscar o conhecimento.", "data_resposta": "2026-04-16T13:01:42+00:00"}, {"id_card": "1262438193.0", "cliente": "Newline Telecom", "nome_contato": "Alisson Emanuel Casimiro Morais", "csm": "Cristian Rodrigues", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "Inclusão de mais cursos, principalmente para departamentos como: Financeiro, Fiscal, Contabilidade, Jurídico, etc. \n\nFornecimento de mais brindes, para diretores e líderes.", "data_resposta": "2026-04-16T13:01:41+00:00"}, {"id_card": "633323950.0", "cliente": "Asernet Telecom", "nome_contato": "João Paulo", "csm": "Raquel Nascimento", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "Adoro utiliza-la", "data_resposta": "2026-04-16T13:01:18+00:00"}, {"id_card": "841783841.0", "cliente": "UNI SERVIÇOS DE TECNOLOGIA DA INFORMAÇÃO LTDA", "nome_contato": "Renaldo", "csm": "Gabrielle Marques", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "Teria que abrir pra outros ramos também alem da telecom", "data_resposta": "2026-04-10T14:33:49+00:00"}, {"id_card": "738875520.0", "cliente": "Click.com", "nome_contato": "Izabel", "csm": "Bianca Madeira", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "Mais cursos", "data_resposta": "2026-04-10T14:30:34+00:00"}, {"id_card": "1049972621.0", "cliente": "Pronet telecom", "nome_contato": "Daniella Cesar de Sousa", "csm": "Bianca Madeira", "nota_numerica": 9, "classificacao_nps": "Promotor", "mensagem_melhoria": "Manter a mesma ajuda inicial para motivar a equipe. Isso se torna um desafio para a empresa!", "data_resposta": "2026-04-10T14:04:35+00:00"}, {"id_card": "1141248611.0", "cliente": "INFOTECHY INTERNET VIA FIBRA", "nome_contato": "DEBORA FELTZ PEREIRA RAYCIK", "csm": "Cristian Rodrigues", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "Está bom", "data_resposta": "2026-03-25T08:24:01+00:00"}, {"id_card": "1252803636.0", "cliente": "nextall", "nome_contato": "Gabriel", "csm": "Cristian Rodrigues", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "Plataforma Excelente, contéudos dinâmicos.", "data_resposta": "2026-03-25T08:13:38+00:00"}, {"id_card": "1087591226.0", "cliente": "LM Telecom Ltda", "nome_contato": "Ingrid", "csm": "Cristian Rodrigues", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "Os cursos são muito bons e a equipe muito prestativa!", "data_resposta": "2026-03-24T17:58:37+00:00"}, {"id_card": "1251671770.0", "cliente": "INET", "nome_contato": "Hugo", "csm": "Nadson Pinheiro", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "Tudo perfeito", "data_resposta": "2026-03-24T16:45:53+00:00"}, {"id_card": "989402928.0", "cliente": "Trevo Internet", "nome_contato": "WERLY MONTEIRO", "csm": "Cristian Rodrigues", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "Até o momento gosto bastante do que a fiberschol proporciona através da plataforma, e o que queria já está vindo que é cursos voltados a gestão do negócio liderança.", "data_resposta": "2026-03-24T16:34:05+00:00"}, {"id_card": "633325044.0", "cliente": "NET WAY INFORMATICA", "nome_contato": "Karla Keller", "csm": "Sem CSM", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "show", "data_resposta": "2026-03-24T16:12:18+00:00"}, {"id_card": "1252654472.0", "cliente": "Ozmaps", "nome_contato": "Gina", "csm": "Bianca Madeira", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "seria muy bueno tener cursos en español!", "data_resposta": "2026-03-24T16:04:04+00:00"}, {"id_card": "633324401.0", "cliente": "Galiza NET", "nome_contato": "Erick Rodrigues Mascarenhas", "csm": "Bianca Madeira", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "Mais eventos online", "data_resposta": "2026-03-24T16:00:59+00:00"}, {"id_card": "1211053363.0", "cliente": "Evottel", "nome_contato": "Caroline Perotto", "csm": "Gabrielle S. Marques", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "gosto do conteúdo, continuem essa plataforma excelente de ensino que são.", "data_resposta": "2026-03-24T16:00:41+00:00"}, {"id_card": "633323966.0", "cliente": "Atel Telecom do Brasil Ltda.", "nome_contato": "Pedro Rh", "csm": "Raquel Nascimento", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "Variedade de cursos.", "data_resposta": "2026-03-24T15:58:07+00:00"}, {"id_card": "1038149643.0", "cliente": "Alternativa Provedor", "nome_contato": "Isaque Oliveira de Santana", "csm": "Sem CSM", "nota_numerica": 8, "classificacao_nps": "Neutro", "mensagem_melhoria": "No momento, valor por usuario", "data_resposta": "2026-03-24T15:01:33+00:00"}, {"id_card": "882682179.0", "cliente": "Grafnet LTDA", "nome_contato": "Adriano Rocha", "csm": "Sem CSM", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "Liberar cursos em todas as areas de telecom", "data_resposta": "2026-03-24T14:55:38+00:00"}, {"id_card": "991307461.0", "cliente": "Sua Internet Ltda (D-kiros)", "nome_contato": "Mara", "csm": "Cristian Rodrigues", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "Nesse momento sem sugestoes", "data_resposta": "2026-03-24T14:54:25+00:00"}, {"id_card": "880333754.0", "cliente": "REDE SHOPPING TELECOM", "nome_contato": "Patricia", "csm": "Cristian Rodrigues", "nota_numerica": 10, "classificacao_nps": "Promotor", "mensagem_melhoria": "Até o momento esta suprindo as minhas espectativas e necessidades", "data_resposta": "2026-03-24T14:54:07+00:00"}], "undeliveredRecords": [{"cliente": "ISP provedor de internet", "nome_contato": "Carlos Henrique", "csm": "Sem CSM", "data_envio": "2026-04-23T11:04:01+00:00", "status_processamento": "em andamento"}, {"cliente": "CONECT FIBER", "nome_contato": "Ivo Sodré Passos", "csm": "Cristian Rodrigues", "data_envio": "2026-04-23T11:03:32+00:00", "status_processamento": "em andamento"}, {"cliente": "LC VIRTUAL NET", "nome_contato": "Nelson", "csm": "Nadson Pinheiro", "data_envio": "2026-04-23T11:03:03+00:00", "status_processamento": "em andamento"}, {"cliente": "GSS TECNOLOGIES S.A.C.", "nome_contato": "Jorge ou Rute", "csm": "Bianca Madeira", "data_envio": "2026-04-22T11:22:03+00:00", "status_processamento": "em andamento"}, {"cliente": "Diginet Telecom - A T Magalhaes", "nome_contato": "Adam", "csm": "Sem CSM", "data_envio": "2026-04-22T11:12:49+00:00", "status_processamento": "em andamento"}, {"cliente": "Connectsul Telecomunicações", "nome_contato": "Karina", "csm": "Gabrielle S. Marques", "data_envio": "2026-04-22T11:06:30+00:00", "status_processamento": "em andamento"}, {"cliente": "Teste Livia - CSM", "nome_contato": "Sem contato", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:10:44+00:00", "status_processamento": "iniciado"}, {"cliente": "GIROCULTURAL LTDA", "nome_contato": "Natália Madi", "csm": "Suellen Ruperte", "data_envio": "2026-04-16T13:10:10+00:00", "status_processamento": "iniciado"}, {"cliente": "Click.com Telecomunicações LTDA ME", "nome_contato": "Izabel", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:09:08+00:00", "status_processamento": "iniciado"}, {"cliente": "CB NET TELECOMUNICACOES LTDA", "nome_contato": "Valdomiro", "csm": "Sem CSM", "data_envio": "2026-04-16T13:08:37+00:00", "status_processamento": "iniciado"}, {"cliente": "RG PROVIDER LTDA", "nome_contato": "Rogerio Ferreira dos Santos", "csm": "Cristian Rodrigues", "data_envio": "2026-04-16T13:08:05+00:00", "status_processamento": "iniciado"}, {"cliente": "Provale TI", "nome_contato": "Jéssica", "csm": "Cristian Rodrigues", "data_envio": "2026-04-16T13:07:35+00:00", "status_processamento": "iniciado"}, {"cliente": "Si Net", "nome_contato": "Robert", "csm": "Bianca Madeira", "data_envio": "2026-04-16T13:07:02+00:00", "status_processamento": "iniciado"}, {"cliente": "Multiplic Comunicação e tecnologia LTDA", "nome_contato": "Kathelyn", "csm": "Cristian Rodrigues", "data_envio": "2026-04-16T13:06:30+00:00", "status_processamento": "iniciado"}, {"cliente": "IDEAL NET", "nome_contato": "Junior", "csm": "Nadson Pinheiro", "data_envio": "2026-04-16T13:05:59+00:00", "status_processamento": "iniciado"}, {"cliente": "ULTRANET", "nome_contato": "Edilson Maier Campos", "csm": "Sem CSM", "data_envio": "2026-03-24T15:59:15+00:00", "status_processamento": "iniciado"}, {"cliente": "ULTRANET (ultranetpa)", "nome_contato": "Edilson Maier Campos", "csm": "Sem CSM", "data_envio": "2026-03-24T15:58:32+00:00", "status_processamento": "iniciado"}]}</script>
+    <script src="dashboard.js"></script>
+  </body>
+</html>
