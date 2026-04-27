@@ -29,8 +29,10 @@
     neutral: "legend-dot--neutral",
     detractor: "legend-dot--detractor",
   };
+  const testMarkers = ["teste", "test", "homolog", "hml", "qa"];
 
   const slots = {
+    monthly: document.getElementById("slot-monthly-nps"),
     gauge: document.getElementById("slot-gauge"),
     respondents: document.getElementById("slot-respondents"),
     rate: document.getElementById("slot-rate"),
@@ -45,10 +47,24 @@
     csm: document.getElementById("filter-csm"),
     classification: document.getElementById("filter-classificacao"),
     score: document.getElementById("filter-nota"),
+    startDate: document.getElementById("filter-data-inicial"),
+    endDate: document.getElementById("filter-data-final"),
     query: document.getElementById("filter-busca"),
     reset: document.getElementById("reset-filters"),
     print: document.getElementById("print-dashboard"),
   };
+
+  const monthLabelFormatter = new Intl.DateTimeFormat("pt-BR", {
+    month: "short",
+    year: "numeric",
+    timeZone: "America/Sao_Paulo",
+  });
+
+  const monthKeyFormatter = new Intl.DateTimeFormat("en-CA", {
+    year: "numeric",
+    month: "2-digit",
+    timeZone: "America/Sao_Paulo",
+  });
 
   function escapeHtml(value) {
     return String(value)
@@ -91,6 +107,32 @@
     }).format(parsedDate).replace(",", "");
   }
 
+  function parseRecordDate(value) {
+    if (!value) {
+      return null;
+    }
+    const parsedDate = new Date(value);
+    return Number.isNaN(parsedDate.getTime()) ? null : parsedDate;
+  }
+
+  function parseDateBoundary(value, endOfDay = false) {
+    if (!value) {
+      return null;
+    }
+    const suffix = endOfDay ? "T23:59:59.999" : "T00:00:00.000";
+    const parsedDate = new Date(`${value}${suffix}`);
+    return Number.isNaN(parsedDate.getTime()) ? null : parsedDate;
+  }
+
+  function monthKey(dateValue) {
+    return monthKeyFormatter.format(dateValue);
+  }
+
+  function monthLabel(dateValue) {
+    const label = monthLabelFormatter.format(dateValue);
+    return label.charAt(0).toUpperCase() + label.slice(1);
+  }
+
   function pluralizeResponses(total) {
     return total === 1 ? "1 resp." : `${total} resp.`;
   }
@@ -112,6 +154,24 @@
   function normalizeText(value, fallback = "-") {
     const text = String(value ?? "").trim();
     return text || fallback;
+  }
+
+  function isValidResponseRecord(record) {
+    const cardId = String(record.id_card ?? "").trim().toLowerCase();
+    if (!cardId || cardId === "nan" || cardId === "null" || cardId === "undefined") {
+      return false;
+    }
+
+    const score = Number(record.nota_numerica);
+    if (Number.isNaN(score) || score < 0 || score > 10) {
+      return false;
+    }
+
+    const textScope = `${record.cliente ?? ""} ${record.nome_contato ?? ""} ${record.mensagem_melhoria ?? ""}`.toLowerCase();
+    if (testMarkers.some((marker) => textScope.includes(marker))) {
+      return false;
+    }
+    return true;
   }
 
   function getZoneMeta(npsScore) {
@@ -241,6 +301,46 @@
     return { ranking, ignored };
   }
 
+  function buildMonthlyNpsSeries() {
+    const grouped = new Map();
+
+    responseRecords.forEach((record) => {
+      if (!isValidResponseRecord(record)) {
+        return;
+      }
+
+      const score = Number(record.nota_numerica);
+      if (Number.isNaN(score) || score < 0 || score > 10) {
+        return;
+      }
+
+      const responseDate = parseRecordDate(record.data_resposta);
+      if (!responseDate) {
+        return;
+      }
+
+      const key = monthKey(responseDate);
+      const bucket = grouped.get(key) || { date: responseDate, records: [] };
+      bucket.records.push(record);
+      if (responseDate < bucket.date) {
+        bucket.date = responseDate;
+      }
+      grouped.set(key, bucket);
+    });
+
+    return Array.from(grouped.entries())
+      .map(([key, bucket]) => {
+        const summary = calculateNps(bucket.records);
+        return {
+          key,
+          label: monthLabel(bucket.date),
+          nps: summary.nps,
+          total: summary.total,
+        };
+      })
+      .sort((left, right) => left.key.localeCompare(right.key));
+  }
+
   function matchesQuery(record, query) {
     if (!query) {
       return true;
@@ -250,11 +350,32 @@
     return haystack.includes(query);
   }
 
+  function matchesDateRange(record, dateKey, state) {
+    const dateValue = parseRecordDate(record[dateKey]);
+    if (!dateValue) {
+      return !state.startDate && !state.endDate;
+    }
+
+    if (state.startDate && dateValue < state.startDate) {
+      return false;
+    }
+
+    if (state.endDate && dateValue > state.endDate) {
+      return false;
+    }
+
+    return true;
+  }
+
   function getState() {
     return {
       csm: controls.csm?.value || "",
       classification: controls.classification?.value || "",
       score: controls.score?.value || "",
+      startDate: parseDateBoundary(controls.startDate?.value || "", false),
+      endDate: parseDateBoundary(controls.endDate?.value || "", true),
+      startDateText: controls.startDate?.value || "",
+      endDateText: controls.endDate?.value || "",
       query: (controls.query?.value || "").trim().toLowerCase(),
     };
   }
@@ -262,24 +383,78 @@
   function filterSentRecords(state) {
     return sentRecords.filter((record) => {
       const csmMatch = !state.csm || record.csm === state.csm;
-      return csmMatch && matchesQuery(record, state.query);
+      const dateMatch = matchesDateRange(record, "data_envio", state);
+      return csmMatch && dateMatch && matchesQuery(record, state.query);
     });
   }
 
   function filterResponseRecords(state) {
     return responseRecords.filter((record) => {
+      if (!isValidResponseRecord(record)) {
+        return false;
+      }
+
       const csmMatch = !state.csm || record.csm === state.csm;
       const classificationMatch = !state.classification || record.classificacao_nps === state.classification;
       const scoreMatch = !state.score || String(record.nota_numerica) === state.score;
-      return csmMatch && classificationMatch && scoreMatch && matchesQuery(record, state.query);
+      const dateMatch = matchesDateRange(record, "data_resposta", state);
+      return csmMatch && classificationMatch && scoreMatch && dateMatch && matchesQuery(record, state.query);
     });
   }
 
   function filterUndeliveredRecords(state) {
     return undeliveredRecords.filter((record) => {
       const csmMatch = !state.csm || record.csm === state.csm;
-      return csmMatch && matchesQuery(record, state.query);
+      const dateMatch = matchesDateRange(record, "data_envio", state);
+      return csmMatch && dateMatch && matchesQuery(record, state.query);
     });
+  }
+
+  function renderMonthlyNpsCard(series) {
+    if (!series.length) {
+      return `
+        <div class="card-head">
+          <div class="card-head__content">
+            <p class="eyebrow">Visão histórica</p>
+            <h2 class="card-title">NPS Geral por Mês</h2>
+          </div>
+        </div>
+        <p class="empty-state">Ainda não há respostas com nota e data válidas para montar o histórico mensal.</p>
+      `;
+    }
+
+    const maxAbsNps = Math.max(...series.map((item) => Math.abs(item.nps)), 1);
+    const columns = series.map((item) => {
+      const height = Math.max((Math.abs(item.nps) / maxAbsNps) * 100, 8);
+      const isPositive = item.nps >= 0;
+      const barClass = isPositive ? "monthly-bar--positive" : "monthly-bar--negative";
+      const npsValue = Math.round(item.nps);
+      const tooltip = `${item.label} | NPS ${npsValue} | ${item.total} respondentes`;
+      return `
+        <div class="monthly-column" title="${escapeHtml(tooltip)}">
+          <div class="monthly-value">NPS ${npsValue}</div>
+          <div class="monthly-track">
+            <div class="monthly-zero" aria-hidden="true"></div>
+            <div class="monthly-bar ${barClass}" style="height: ${height.toFixed(2)}%;" title="${escapeHtml(tooltip)}"></div>
+          </div>
+          <div class="monthly-label">${escapeHtml(item.label)}</div>
+        </div>
+      `;
+    }).join("");
+
+    return `
+      <div class="card-head">
+        <div class="card-head__content">
+          <p class="eyebrow">Visão histórica</p>
+          <h2 class="card-title">NPS Geral por Mês</h2>
+        </div>
+        <p class="chart-caption">Não é afetado pelos filtros abaixo</p>
+      </div>
+      <div class="monthly-chart" aria-label="Gráfico de NPS mensal geral">
+        ${columns}
+      </div>
+      <p class="card-footnote">Base mensal: respostas com <strong>nota_numerica</strong> entre 0 e 10 e <strong>data_resposta</strong> válida.</p>
+    `;
   }
 
   function renderStatusBadge(zoneMeta) {
@@ -472,9 +647,7 @@
       content = `<ol class="ranking-list">${items}</ol>`;
     }
 
-    const footnote = ignored > 0
-      ? `<p class="card-footnote">${ignored} respostas com nota válida ficaram fora do ranking por não terem CSM preenchido.</p>`
-      : "";
+    const footnote = `<p class="card-footnote">Sem CSM: ${ignored} respostas com nota válida ficaram fora do ranking.</p>`;
 
     return `
       <section class="card card-ranking">
@@ -666,6 +839,12 @@
     if (state.score) {
       chips.push(`<span class="filter-chip">Nota: ${escapeHtml(state.score)}</span>`);
     }
+    if (state.startDateText) {
+      chips.push(`<span class="filter-chip">Data inicial: ${escapeHtml(state.startDateText)}</span>`);
+    }
+    if (state.endDateText) {
+      chips.push(`<span class="filter-chip">Data final: ${escapeHtml(state.endDateText)}</span>`);
+    }
     if (state.query) {
       chips.push(`<span class="filter-chip">Busca: ${escapeHtml(state.query)}</span>`);
     }
@@ -690,17 +869,24 @@
     const { ranking, ignored } = buildRanking(filteredResponses.filter((record) => record.nota_numerica !== null));
     const responseRate = baseSent.length ? (filteredResponses.length / baseSent.length) * 100 : 0;
 
+    if (slots.monthly) {
+      slots.monthly.innerHTML = renderMonthlyNpsCard(buildMonthlyNpsSeries());
+    }
+
     slots.gauge.innerHTML = renderGaugeCard(summary);
     slots.respondents.innerHTML = renderMetricCard(
       "Total de Respondentes",
       formatNumber(filteredResponses.length),
-      "Clientes com data_resposta preenchida na seleção atual.",
+      "Respostas válidas com data_resposta preenchida na seleção atual.",
       "metric-card--respondents",
     );
 
-    let rateSubtitle = `${formatNumber(filteredResponses.length)} respostas em ${formatNumber(baseSent.length)} envios filtráveis.`;
+    let rateSubtitle = `${formatNumber(filteredResponses.length)} respostas válidas em ${formatNumber(baseSent.length)} envios filtráveis.`;
     if (state.classification || state.score) {
       rateSubtitle += " Nota/classificação refinam apenas os respondentes.";
+    }
+    if (state.startDateText || state.endDateText) {
+      rateSubtitle += " Período aplicado na consulta.";
     }
 
     slots.rate.innerHTML = renderMetricCard(
@@ -723,11 +909,13 @@
     controls.csm.value = "";
     controls.classification.value = "";
     controls.score.value = "";
+    controls.startDate.value = "";
+    controls.endDate.value = "";
     controls.query.value = "";
     render();
   }
 
-  [controls.csm, controls.classification, controls.score].forEach((element) => {
+  [controls.csm, controls.classification, controls.score, controls.startDate, controls.endDate].forEach((element) => {
     element?.addEventListener("change", render);
   });
 
